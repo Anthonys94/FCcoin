@@ -26,6 +26,7 @@
     font-family: 'Barlow', sans-serif;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -266,7 +267,18 @@
     Hai già un account? <a href="/login">Accedi</a>
   </div>
 </div>
-<footer style="text-align:center;padding:20px 24px;color:#6b6b8a;font-size:0.75rem;">
+<footer style="
+  position:fixed;
+  bottom:0; left:0; right:0;
+  text-align:center;
+  padding:14px 24px;
+  color:#6b6b8a;
+  font-size:0.75rem;
+  background:rgba(10,10,15,0.95);
+  border-top:1px solid rgba(255,255,255,0.04);
+  backdrop-filter:blur(10px);
+  z-index:100;
+">
   <a href="/privacy" style="color:#6b6b8a;text-decoration:none;margin:0 10px;">Privacy Policy</a>
   <a href="/terms" style="color:#6b6b8a;text-decoration:none;margin:0 10px;">Termini</a>
   <a href="/come-funziona" style="color:#6b6b8a;text-decoration:none;margin:0 10px;">Come Funziona</a>
