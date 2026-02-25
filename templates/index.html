@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUT SPIN — Vinci FIFA Coins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- Google AdSense placeholder -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8906564951549879" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --gold: #FFD700;
+    --gold2: #FFA500;
+    --dark: #0a0a0f;
+    --dark2: #12121a;
+    --card: #1a1a28;
+    --accent: #00e5ff;
+    --green: #00ff88;
+    --red: #ff3366;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND EFFECT */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,215,0,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,229,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid rgba(255,215,0,0.15);
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .logo span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+  .header-right { display: flex; align-items: center; gap: 20px; }
+
+  .coin-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,215,0,0.1);
+    border: 1px solid rgba(255,215,0,0.3);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .coin-icon { font-size: 1.2rem; }
+
+  .spins-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  /* AD BANNER TOP */
+  .ad-banner-top {
+    background: rgba(26,26,40,0.8);
+    border-bottom: 1px solid rgba(255,215,0,0.08);
+    padding: 8px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    position: relative;
+  }
+
+  .ad-banner-top .ad-label {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ADSENSE SLOT */
+  .adsense-slot {
+    background: rgba(26,26,40,0.6);
+    border: 1px dashed rgba(255,215,0,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-height: 90px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .adsense-slot::after {
+    content: 'Advertisement';
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    font-size: 0.6rem;
+  }
+
+  /* MAIN LAYOUT */
+  .main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  .page-title .highlight {
+    background: linear-gradient(135deg, var(--gold), var(--gold2), #ff6b00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .page-subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* SPIN LAYOUT */
+  .spin-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .spin-layout {
+      grid-template-columns: 1fr;
+    }
+    .side-panel { display: none; }
+  }
+
+  /* WHEEL CONTAINER */
+  .wheel-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .wheel-wrapper {
+    position: relative;
+    width: 380px;
+    height: 380px;
+  }
+
+  @media (max-width: 480px) {
+    .wheel-wrapper { width: 300px; height: 300px; }
+  }
+
+  /* POINTER */
+  .wheel-pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 36px solid var(--gold);
+    z-index: 10;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.8));
+  }
+
+  .wheel-outer-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--gold) 0deg, var(--gold2) 60deg,
+      var(--gold) 120deg, var(--gold2) 180deg,
+      var(--gold) 240deg, var(--gold2) 300deg,
+      var(--gold) 360deg
+    );
+    animation: ring-spin 8s linear infinite;
+    opacity: 0.6;
+  }
+
+  @keyframes ring-spin { to { transform: rotate(360deg); } }
+
+  #wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    position: relative;
+    z-index: 2;
+    box-shadow:
+      0 0 0 4px var(--gold),
+      0 0 30px rgba(255,215,0,0.3),
+      0 0 60px rgba(255,215,0,0.1),
+      inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  .wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #ffffff 0%, var(--gold) 50%, var(--gold2) 100%);
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 20px rgba(255,215,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  /* GLOW EFFECT WHILE SPINNING */
+  .wheel-wrapper.spinning #wheel {
+    box-shadow:
+      0 0 0 4px var(--gold),
+      0 0 60px rgba(255,215,0,0.6),
+      0 0 120px rgba(255,215,0,0.3),
+      inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  /* SPIN BUTTON */
+  .spin-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    padding: 16px 60px;
+    border: none;
+    border-radius: 60px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2), #ff8c00);
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255,165,0,0.4);
+  }
+
+  .spin-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .spin-btn:hover::before { left: 150%; }
+  .spin-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,165,0,0.6); }
+  .spin-btn:active { transform: translateY(0); }
+  .spin-btn:disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .spin-cost {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: -12px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* REWARDED AD BUTTON */
+  .watch-ad-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 32px;
+    border: 2px solid rgba(0,255,136,0.5);
+    background: rgba(0,255,136,0.06);
+    color: var(--green);
+    border-radius: 60px;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .watch-ad-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(0,255,136,0.08), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+
+  .watch-ad-btn:hover::before { transform: translateX(100%); }
+
+  .watch-ad-btn:hover {
+    border-color: var(--green);
+    background: rgba(0,255,136,0.12);
+    box-shadow: 0 0 20px rgba(0,255,136,0.2);
+  }
+
+  .watch-ad-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .watch-ad-btn .ad-icon { font-size: 1.2rem; }
+
+  .ad-limit-text {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* REWARDED AD MODAL */
+  .rewarded-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .rewarded-overlay.show { opacity: 1; pointer-events: all; }
+
+  .rewarded-box {
+    background: var(--card);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+  }
+
+  .rewarded-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .rewarded-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+
+  /* AD PLAYER MOCK */
+  .ad-player {
+    background: #000;
+    border-radius: 12px;
+    aspect-ratio: 16/9;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Real AdSense rewarded slot inside the player */
+  .ad-player ins {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .ad-countdown {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    z-index: 5;
+  }
+
+  .ad-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .ad-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), #00ffcc);
+    width: 0%;
+    transition: width 0.1s linear;
+    border-radius: 2px;
+  }
+
+  .ad-reward-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  .skip-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--muted);
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: not-allowed;
+    font-size: 0.8rem;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+
+  .skip-btn.active {
+    cursor: pointer;
+    border-color: rgba(255,255,255,0.3);
+    color: var(--text);
+  }
+
+  .skip-btn.active:hover { background: rgba(255,255,255,0.05); }
+
+  .free-spin-label {
+    background: rgba(0,255,136,0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* RESULT POPUP */
+  .result-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .result-popup.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 2px solid var(--gold);
+    border-radius: 24px;
+    padding: 48px 60px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 0 60px rgba(255,215,0,0.3);
+    transform: scale(0.8);
+    transition: transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-popup.show .result-card { transform: scale(1); }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 60%);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .result-icon { font-size: 4rem; margin-bottom: 16px; }
+
+  .result-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .result-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+
+  .result-unit { font-size: 1rem; color: var(--muted); margin-top: 4px; margin-bottom: 24px; }
+
+  /* INTERSTITIAL AD inside popup */
+  .interstitial-ad {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 16px 0;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-result-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    padding: 12px 40px;
+    border: 2px solid var(--gold);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .close-result-btn:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  /* SIDE PANELS */
+  .side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel-card {
+    background: var(--card);
+    border: 1px solid rgba(255,215,0,0.1);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  /* PRIZE LIST */
+  .prize-list { list-style: none; }
+
+  .prize-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.85rem;
+  }
+
+  .prize-item:last-child { border-bottom: none; }
+
+  .prize-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  .prize-name { flex: 1; }
+  .prize-chance { color: var(--muted); font-size: 0.75rem; }
+
+  /* BUY SPINS */
+  .buy-spin-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(0,229,255,0.3);
+    background: rgba(0,229,255,0.05);
+    color: var(--accent);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .buy-spin-btn:hover {
+    background: rgba(0,229,255,0.15);
+    border-color: var(--accent);
+  }
+
+  .buy-price {
+    background: rgba(0,229,255,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+  }
+
+  /* AFFILIATE SECTION */
+  .affiliate-card {
+    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,140,0,0.05));
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+
+  .affiliate-card:hover {
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+
+  .affiliate-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+  .affiliate-info { flex: 1; }
+  .affiliate-name { font-weight: 700; font-size: 0.9rem; }
+  .affiliate-desc { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .affiliate-tag {
+    font-size: 0.65rem;
+    background: rgba(0,255,136,0.15);
+    color: var(--green);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* LEADERBOARD */
+  .lb-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.85rem;
+  }
+
+  .lb-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--muted);
+    width: 20px;
+    text-align: center;
+  }
+
+  .lb-rank.gold { color: var(--gold); }
+  .lb-rank.silver { color: #c0c0c0; }
+  .lb-rank.bronze { color: #cd7f32; }
+
+  .lb-name { flex: 1; }
+  .lb-coins { color: var(--gold); font-weight: 700; font-size: 0.8rem; }
+
+  /* BOTTOM AD BANNER */
+  .ad-bottom {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  /* HISTORY */
+  .history-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 0;
+    scrollbar-width: none;
+    margin-top: -8px;
+    margin-bottom: 8px;
+  }
+
+  .history-strip::-webkit-scrollbar { display: none; }
+
+  .history-chip {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid;
+    animation: fadeSlide 0.3s ease;
+  }
+
+  @keyframes fadeSlide {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* CONFETTI */
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 998;
+    overflow: hidden;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confetti-fall 3s linear forwards;
+    border-radius: 2px;
+  }
+
+  @keyframes confetti-fall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* MODAL PAYMENT */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal-card {
+    background: var(--card);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.show .modal-card { transform: translateY(0); }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .modal-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+
+  .pkg-option {
+    background: rgba(0,229,255,0.05);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .pkg-option:hover, .pkg-option.selected {
+    border-color: var(--accent);
+    background: rgba(0,229,255,0.1);
+  }
+
+  .pkg-label { font-weight: 700; }
+  .pkg-label span { font-size: 0.75rem; color: var(--muted); display: block; margin-top: 2px; }
+  .pkg-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); }
+
+  .pay-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+  }
+
+  .pay-btn:hover { opacity: 0.9; }
+
+  .cancel-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 12px;
+    display: block;
+    width: 100%;
+  }
+
+  .cancel-btn:hover { color: var(--text); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--card);
+    border: 1px solid rgba(255,215,0,0.3);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    z-index: 1000;
+    transition: transform 0.3s;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── STREAK BANNER ────────────────────────── */
+  .streak-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(255,140,0,0.12), rgba(255,215,0,0.06));
+    border: 1px solid rgba(255,165,0,0.3);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 0;
+  }
+  .streak-top-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .streak-fire { font-size: 1.6rem; flex-shrink: 0; }
+  .streak-info { flex: 1; min-width: 0; }
+  .streak-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .streak-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .streak-days {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+  }
+  .streak-day {
+    flex: 1;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,165,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .streak-day.done {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-color: var(--gold);
+    color: #000;
+  }
+  .streak-day.today {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 8px rgba(255,215,0,0.3);
+  }
+
+  /* ── REFERRAL PANEL ───────────────────────── */
+  .referral-box {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 4px;
+  }
+  .referral-link-row {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .referral-link-input {
+    flex: 1;
+    min-width: 0;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 0;
+  }
+  .copy-btn {
+    flex-shrink: 0;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Barlow', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { background: rgba(0,229,255,0.2); }
+  .referral-stats {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .ref-stat {
+    flex: 1;
+    text-align: center;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 8px 4px;
+    min-width: 0;
+  }
+  .ref-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .ref-stat-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+  .referral-rewards-info {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .referral-rewards-info span { color: var(--green); font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<!-- TOP AD BANNER -->
+<div class="ad-banner-top">
+  <span class="ad-label">Ads</span>
+  <!-- Google AdSense 728x90 -->
+  <ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-slot="1234567890"></ins>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">FUT <span>SPIN</span></div>
+  <div class="header-right">
+    <div style="color:var(--muted);font-size:0.85rem;font-weight:600;">👤 {{ user.username }}</div>
+    <div class="spins-badge">🎰 <span id="spins-count">{{ user.spins + user.spins_extra }}</span> Spin</div>
+    <div class="coin-badge"><span class="coin-icon">🪙</span> <span id="coin-count">{{ user.coins }}</span> FC</div>
+    <a href="/logout" style="color:var(--muted);font-size:0.8rem;text-decoration:none;padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;transition:all 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" >Esci</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-container">
+  <h1 class="page-title">VINCI <span class="highlight">FIFA COINS</span></h1>
+  <p class="page-subtitle">Gira la ruota · Accumula coins · Scala la classifica</p>
+
+  <!-- HISTORY -->
+  <div class="history-strip" id="history-strip"></div>
+
+  <!-- 3 COLUMN LAYOUT -->
+  <div class="spin-layout">
+
+    <!-- LEFT PANEL -->
+    <div class="side-panel">
+
+      <!-- PRIZES -->
+      <div class="panel-card">
+        <div class="panel-title">⚡ Premi</div>
+        <ul class="prize-list" id="prize-list"></ul>
+      </div>
+
+      <!-- ADS LEFT -->
+      <div class="panel-card">
+        <div class="adsense-slot" style="min-height:250px;">
+          <ins class="adsbygoogle"
+               style="display:block;width:250px;height:250px"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="0987654321"></ins>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CENTER: WHEEL -->
+    <div class="wheel-section">
+      <div class="wheel-wrapper" id="wheel-wrapper">
+        <div class="wheel-outer-ring"></div>
+        <div class="wheel-pointer"></div>
+        <canvas id="wheel" width="380" height="380"></canvas>
+        <div class="wheel-center">⚽</div>
+      </div>
+
+      <div class="free-spin-label" id="free-spin-label">🎁 HAI 3 SPIN GRATUITI</div>
+
+      <button class="spin-btn" id="spin-btn" onclick="doSpin()">GIRA!</button>
+      <div class="spin-cost" id="spin-cost">Gratis oggi · poi €0.49/spin</div>
+
+      <!-- WATCH AD FOR FREE SPIN -->
+      <button class="watch-ad-btn" id="watch-ad-btn" onclick="startRewardedAd()">
+        <span class="ad-icon">📺</span>
+        <span id="watch-ad-label">GUARDA UN VIDEO → +1 SPIN</span>
+      </button>
+      <div class="ad-limit-text" id="ad-limit-text">0 / 2 spin gratuiti usati oggi</div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="side-panel">
+
+      <!-- STREAK BANNER -->
+      <div class="panel-card" style="padding:16px 20px;">
+        <div class="streak-banner">
+          <div class="streak-top-row">
+            <div class="streak-fire">🔥</div>
+            <div class="streak-info">
+              <div class="streak-title">STREAK · <span id="streak-count">{{ user.streak }}</span> GIORNI</div>
+              <div class="streak-sub">
+                {% if streak_bonus > 0 %}
+                  🎁 Bonus oggi: +{{ streak_bonus }} spin extra!
+                {% else %}
+                  Torna domani per bonus spin!
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="streak-days" id="streak-days"></div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="panel-card">
+        <div class="panel-title">🏆 Top Players</div>
+        <div id="leaderboard"></div>
+      </div>
+
+      <!-- BUY SPINS -->
+      <div class="panel-card">
+        <div class="panel-title">💎 Compra Spin</div>
+        <button class="buy-spin-btn" onclick="openBuyModal(3, 0.99)">
+          <span>3 Spin Pack</span>
+          <span class="buy-price">€0.99</span>
+        </button>
+        <button class="buy-spin-btn" onclick="openBuyModal(10, 2.49)">
+          <span>10 Spin Pack 🔥</span>
+          <span class="buy-price">€2.49</span>
+        </button>
+        <button class="buy-spin-btn" onclick="openBuyModal(25, 4.99)">
+          <span>25 Spin Pack 👑</span>
+          <span class="buy-price">€4.99</span>
+        </button>
+      </div>
+
+      <!-- REFERRAL PANEL -->
+      <div class="panel-card">
+        <div class="panel-title">🎁 Invita Amici</div>
+        <div class="referral-box">
+          <div style="font-size:0.8rem;color:var(--text);font-weight:600;margin-bottom:6px;">
+            Il tuo link personale:
+          </div>
+          <div class="referral-link-row">
+            <input class="referral-link-input" id="referral-link-input"
+                   value="{{ referral_url }}" readonly>
+            <button class="copy-btn" onclick="copyReferral()">📋 COPIA</button>
+          </div>
+          <div class="referral-stats">
+            <div class="ref-stat">
+              <div class="ref-stat-num">{{ referral_count }}</div>
+              <div class="ref-stat-label">Invitati</div>
+            </div>
+            <div class="ref-stat">
+              <div class="ref-stat-num">{{ referral_rewarded }}</div>
+              <div class="ref-stat-label">Attivi</div>
+            </div>
+            <div class="ref-stat">
+              <div class="ref-stat-num">{{ referral_rewarded * 3 }}</div>
+              <div class="ref-stat-label">Spin guadagnati</div>
+            </div>
+          </div>
+          <div class="referral-rewards-info">
+            Chi si registra col tuo link: <span>+2 spin</span><br>
+            Tu quando l'amico gira: <span>+3 spin</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFFILIATE LINKS -->
+      <div class="panel-card">
+        <div class="panel-title">🔗 Partner Deals</div>
+
+        <a href="https://www.ea.com/fifa" target="_blank" class="affiliate-card">
+          <div class="affiliate-icon">⚽</div>
+          <div class="affiliate-info">
+            <div class="affiliate-name">EA FC Points</div>
+            <div class="affiliate-desc">Acquista FC Points ufficiali</div>
+          </div>
+          <span class="affiliate-tag">Official</span>
+        </a>
+
+        <a href="https://www.mmoga.it" target="_blank" class="affiliate-card">
+          <div class="affiliate-icon">🏪</div>
+          <div class="affiliate-info">
+            <div class="affiliate-name">MMOGA Store</div>
+            <div class="affiliate-desc">Coins e carte FIFA</div>
+          </div>
+          <span class="affiliate-tag">-15%</span>
+        </a>
+
+        <a href="https://www.g2a.com" target="_blank" class="affiliate-card">
+          <div class="affiliate-icon">🎮</div>
+          <div class="affiliate-info">
+            <div class="affiliate-name">G2A Games</div>
+            <div class="affiliate-desc">Giochi e DLC a prezzi top</div>
+          </div>
+          <span class="affiliate-tag">Sale</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM AD BANNER -->
+  <div class="ad-bottom">
+    <div class="adsense-slot" style="max-width:970px; margin:0 auto;">
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:970px;height:90px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1122334455"></ins>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESULT POPUP -->
+<div class="result-popup" id="result-popup">
+  <div class="result-card">
+    <div class="result-icon" id="result-icon">🏆</div>
+    <div class="result-title" id="result-title">HAI VINTO!</div>
+    <div class="result-amount" id="result-amount">500</div>
+    <div class="result-unit">FIFA COINS</div>
+    <!-- INTERSTITIAL AD (attiva dopo aver configurato AdSense) -->
+    <div class="interstitial-ad" id="interstitial-ad-slot" style="display:none;">
+      <ins class="adsbygoogle"
+           style="display:block;width:300px;height:60px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="9988776655"></ins>
+    </div>
+    <button class="close-result-btn" onclick="closeResult()">CONTINUA →</button>
+  </div>
+</div>
+
+<!-- BUY MODAL -->
+<div class="modal-overlay" id="buy-modal">
+  <div class="modal-card">
+    <div class="modal-title">💎 COMPRA SPIN</div>
+    <div class="modal-sub">Scegli il tuo pacchetto</div>
+    <div id="modal-packages"></div>
+    <button class="pay-btn" onclick="completePurchase()">ACQUISTA ORA</button>
+    <button class="cancel-btn" onclick="closeBuyModal()">Annulla</button>
+  </div>
+</div>
+
+<!-- REWARDED AD MODAL -->
+<div class="rewarded-overlay" id="rewarded-overlay">
+  <div class="rewarded-box">
+    <div class="rewarded-title">📺 GUARDA L'AD</div>
+    <div class="rewarded-sub">Completa il video per ottenere il tuo spin gratuito</div>
+
+    <!-- AD PLAYER: in produzione inserisci qui l'Ad Unit Rewarded di AdSense/AdMob -->
+    <div class="ad-player" id="ad-player">
+      <!-- Google AdSense Rewarded Ad Unit (sostituisci con il tuo slot) -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="REWARDED_SLOT_ID"
+           data-ad-format="rewarded"
+           data-full-width-responsive="true"></ins>
+      <!-- Fallback visivo mentre l'ad carica -->
+      <div id="ad-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:12px;color:#555;">
+        <div style="font-size:2.5rem">🎮</div>
+        <div style="font-size:0.8rem;letter-spacing:2px;text-transform:uppercase">Caricamento ad...</div>
+        <div id="ad-loading-bar" style="width:60%;height:3px;background:#222;border-radius:2px;overflow:hidden;">
+          <div style="height:100%;background:#555;animation:adload 2s linear forwards;border-radius:2px;"></div>
+        </div>
+      </div>
+      <div class="ad-countdown" id="ad-countdown">30s</div>
+    </div>
+
+    <div class="ad-progress">
+      <div class="ad-progress-fill" id="ad-progress-fill"></div>
+    </div>
+
+    <div class="ad-reward-info">
+      <span>🎰</span>
+      <span>Ricompensa: <strong>+1 Spin Gratuito</strong></span>
+    </div>
+
+    <button class="skip-btn" id="skip-btn" onclick="skipAd()" disabled>
+      SALTA (disponibile a fine video)
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes adload {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+</style>
+
+<!-- CONFETTI -->
+<div class="confetti-container" id="confetti-container"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// WHEEL DATA
+// ============================================================
+const PRIZES = [
+  { label: '200 FC',   coins: 200,   color: '#2d6a4f', textColor: '#95d5b2', weight: 30 },
+  { label: '500 FC',   coins: 500,   color: '#1d3557', textColor: '#a8dadc', weight: 25 },
+  { label: '1K FC',    coins: 1000,  color: '#4a1942', textColor: '#e0aaff', weight: 20 },
+  { label: '2K FC',    coins: 2000,  color: '#7b2d00', textColor: '#fca311', weight: 12 },
+  { label: '5K FC',    coins: 5000,  color: '#6d0000', textColor: '#ff6b6b', weight: 8 },
+  { label: '10K FC',   coins: 10000, color: '#1b4332', textColor: '#40916c', weight: 4 },
+  { label: '50K FC',   coins: 50000, color: '#7f4f24', textColor: '#FFD700', weight: 1 },
+  { label: 'MISS!',    coins: 0,     color: '#333',    textColor: '#888',    weight: 0 },
+];
+
+// Build weighted segment array
+const SEGMENTS = [];
+PRIZES.forEach((p, i) => {
+  for (let w = 0; w < p.weight; w++) SEGMENTS.push(i);
+});
+
+// ============================================================
+// STATE
+// ============================================================
+const MAX_REWARDED_PER_DAY = 2;
+
+// State popolato dal server via Jinja2
+let state = {
+  coins: {{ user.coins }},
+  spins: {{ user.spins + user.spins_extra }},
+  rewardedToday: {{ user.rewarded_today }},
+  history: [{% for h in history %}{"label":"{{ h.label }}","coins":{{ h.coins_won }}}{% if not loop.last %},{% endif %}{% endfor %}],
+  spinning: false,
+  currentRotation: 0,
+  selectedPkg: null,
+};
+
+function saveState() {
+  // I dati sono sul server — niente localStorage
+}
+
+// ============================================================
+// DRAW WHEEL
+// ============================================================
+function drawWheel() {
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2, R = W / 2 - 4;
+  const sliceAngle = (2 * Math.PI) / PRIZES.length;
+
+  ctx.clearRect(0, 0, W, H);
+
+  PRIZES.forEach((prize, i) => {
+    const startAngle = i * sliceAngle - Math.PI / 2;
+    const endAngle = startAngle + sliceAngle;
+
+    // Segment
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = prize.color;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(startAngle + sliceAngle / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = prize.textColor;
+    ctx.font = `bold ${W < 340 ? 11 : 13}px Bebas Neue, sans-serif`;
+    ctx.letterSpacing = '1px';
+    ctx.fillText(prize.label, R - 14, 5);
+    ctx.restore();
+  });
+}
+
+// ============================================================
+// SPIN LOGIC
+// ============================================================
+function pickPrize() {
+  const idx = SEGMENTS[Math.floor(Math.random() * SEGMENTS.length)];
+  return idx;
+}
+
+function doSpin() {
+  if (state.spinning) return;
+  if (state.spins <= 0) {
+    openBuyModal();
+    return;
+  }
+
+  state.spinning = true;
+  state.spins--;
+  updateUI();
+
+  const prizeIndex = pickPrize();
+  const sliceAngle = 360 / PRIZES.length;
+
+  // Calculate target rotation
+  const baseSpins = 5 + Math.floor(Math.random() * 5); // 5-10 full rotations
+  const targetSliceAngle = prizeIndex * sliceAngle + sliceAngle / 2;
+  const correction = 360 - (targetSliceAngle % 360);
+  const totalRotation = state.currentRotation + baseSpins * 360 + correction;
+
+  const canvas = document.getElementById('wheel');
+  canvas.style.transform = `rotate(${totalRotation}deg)`;
+  state.currentRotation = totalRotation % 360;
+
+  document.getElementById('spin-btn').disabled = true;
+  document.getElementById('wheel-wrapper').classList.add('spinning');
+
+  // Chiama il server durante l'animazione
+  fetch('/api/spin', { method: 'POST', headers: {'Content-Type': 'application/json'} })
+    .then(r => r.json())
+    .then(data => {
+      // Aggiorna state con dati reali dal server
+      if (data.success) {
+        state.coins = data.coins;
+        state.spins = data.spins + data.spins_extra;
+      }
+    })
+    .catch(() => {});
+
+  setTimeout(() => {
+    state.spinning = false;
+    document.getElementById('wheel-wrapper').classList.remove('spinning');
+    document.getElementById('spin-btn').disabled = false;
+
+    const prize = PRIZES[prizeIndex];
+    showResult(prize);
+    addHistory(prize);
+    updateUI();
+  }, 4200);
+}
+
+// ============================================================
+// UI UPDATES
+// ============================================================
+function updateUI() {
+  document.getElementById('coin-count').textContent = state.coins.toLocaleString('it-IT');
+  document.getElementById('spins-count').textContent = state.spins;
+
+  const label = document.getElementById('free-spin-label');
+  if (state.spins > 0) {
+    label.textContent = `🎁 HAI ${state.spins} SPIN DISPONIBILI`;
+    label.style.borderColor = '#00ff88';
+    label.style.color = '#00ff88';
+  } else {
+    label.textContent = '❌ SPIN ESAURITI — RICARICA!';
+    label.style.borderColor = '#ff3366';
+    label.style.color = '#ff3366';
+  }
+
+  const costEl = document.getElementById('spin-cost');
+  costEl.textContent = state.spins > 0 ? 'Gratis oggi · poi €0.49/spin' : 'Acquista spin per continuare';
+
+  // Watch Ad button state
+  const used = state.rewardedToday;
+  const remaining = MAX_REWARDED_PER_DAY - used;
+  const adBtn = document.getElementById('watch-ad-btn');
+  const adLabel = document.getElementById('watch-ad-label');
+  const adLimitText = document.getElementById('ad-limit-text');
+
+  if (remaining > 0) {
+    adBtn.disabled = false;
+    adLabel.textContent = 'GUARDA UN VIDEO → +1 SPIN';
+    adLimitText.textContent = used + ' / ' + MAX_REWARDED_PER_DAY + ' spin gratuiti usati oggi';
+    adLimitText.style.color = 'var(--muted)';
+  } else {
+    adBtn.disabled = true;
+    adLabel.textContent = 'LIMITE GIORNALIERO RAGGIUNTO';
+    adLimitText.textContent = 'Torna domani per altri spin gratuiti';
+    adLimitText.style.color = 'var(--red)';
+  }
+}
+
+function showResult(prize) {
+  const popup = document.getElementById('result-popup');
+  document.getElementById('result-icon').textContent = prize.coins > 0 ? (prize.coins >= 10000 ? '👑' : '🏆') : '😞';
+  document.getElementById('result-title').textContent = prize.coins > 0 ? 'HAI VINTO!' : 'PECCATO!';
+  document.getElementById('result-amount').textContent = prize.coins > 0 ? prize.coins.toLocaleString('it-IT') : '0';
+  popup.classList.add('show');
+
+  if (prize.coins > 0) launchConfetti();
+}
+
+function closeResult() {
+  document.getElementById('result-popup').classList.remove('show');
+  document.getElementById('confetti-container').innerHTML = '';
+}
+
+function addHistory(prize) {
+  state.history.unshift({ label: prize.label, coins: prize.coins });
+  renderHistory();
+}
+
+function renderHistory() {
+  const strip = document.getElementById('history-strip');
+  strip.innerHTML = state.history.slice(0, 15).map(h => {
+    const color = h.coins === 0 ? '#ff3366' : h.coins >= 10000 ? '#FFD700' : '#00e5ff';
+    return `<div class="history-chip" style="border-color:${color};color:${color}">${h.label}</div>`;
+  }).join('');
+}
+
+// ============================================================
+// PRIZE LIST
+// ============================================================
+function renderPrizeList() {
+  const list = document.getElementById('prize-list');
+  list.innerHTML = PRIZES.filter(p => p.coins > 0).map(p => {
+    const totalWeight = PRIZES.reduce((a, b) => a + b.weight, 0);
+    const pct = ((p.weight / totalWeight) * 100).toFixed(1);
+    return `
+      <li class="prize-item">
+        <span class="prize-color" style="background:${p.textColor}"></span>
+        <span class="prize-name">${p.label}</span>
+        <span class="prize-chance">${pct}%</span>
+      </li>`;
+  }).join('');
+}
+
+// ============================================================
+// LEADERBOARD (mock + real from backend)
+// ============================================================
+function renderLeaderboard() {
+  fetch('/api/leaderboard')
+    .then(r => r.json())
+    .then(leaders => {
+      const rankClasses = ['gold', 'silver', 'bronze', '', '', '', '', '', '', ''];
+      const currentUser = '{{ user.username }}';
+      document.getElementById('leaderboard').innerHTML = leaders.slice(0, 5).map((p, i) =>
+        `<div class="lb-item" style="${p.username === currentUser ? 'background:rgba(255,215,0,0.05);border-radius:8px;padding:8px 4px;' : ''}">
+          <span class="lb-rank ${rankClasses[i]}">${i + 1}</span>
+          <span class="lb-name">${p.username}${p.username === currentUser ? ' 👤' : ''}</span>
+          <span class="lb-coins">🪙 ${p.coins.toLocaleString('it-IT')}</span>
+        </div>`
+      ).join('') || '<div style="color:var(--muted);font-size:0.8rem;text-align:center;padding:12px;">Nessun dato ancora</div>';
+    })
+    .catch(() => {});
+}
+
+// ============================================================
+// BUY MODAL
+// ============================================================
+const PACKAGES = [
+  { spins: 3,  price: 0.99,  label: '3 Spin Pack',   desc: 'Entry level' },
+  { spins: 10, price: 2.49,  label: '10 Spin Pack',  desc: '🔥 Più popolare' },
+  { spins: 25, price: 4.99,  label: '25 Spin Pack',  desc: '👑 Miglior valore' },
+];
+
+let buyAmount = null;
+
+function openBuyModal(spins, price) {
+  const modal = document.getElementById('buy-modal');
+  const pkgs = document.getElementById('modal-packages');
+  pkgs.innerHTML = PACKAGES.map(p => `
+    <div class="pkg-option ${p.spins === spins ? 'selected' : ''}" onclick="selectPkg(this, ${p.spins}, ${p.price})">
+      <div class="pkg-label">${p.label}<span>${p.desc}</span></div>
+      <div class="pkg-price">€${p.price}</div>
+    </div>
+  `).join('');
+  buyAmount = { spins, price };
+  modal.classList.add('show');
+}
+
+function selectPkg(el, spins, price) {
+  document.querySelectorAll('.pkg-option').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  buyAmount = { spins, price };
+}
+
+function closeBuyModal() {
+  document.getElementById('buy-modal').classList.remove('show');
+}
+
+function completePurchase() {
+  if (!buyAmount) return;
+  // In produzione: redirect to Stripe/PayPal
+  fetch('/api/create-checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(buyAmount),
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.url) window.location.href = data.url;
+    else {
+      // DEMO: add spins directly
+      state.spins += buyAmount.spins;
+      saveState();
+      updateUI();
+      closeBuyModal();
+      showToast(`✅ ${buyAmount.spins} spin aggiunti!`);
+    }
+  })
+  .catch(() => {
+    state.spins += buyAmount.spins;
+    saveState();
+    updateUI();
+    closeBuyModal();
+    showToast(`✅ ${buyAmount.spins} spin aggiunti (demo)!`);
+  });
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#FFD700','#FFA500','#00e5ff','#00ff88','#ff3366','#ffffff'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ============================================================
+// REWARDED AD SYSTEM
+// ============================================================
+let adTimer = null;
+const AD_DURATION = 30; // seconds
+
+function startRewardedAd() {
+  if (state.rewardedToday >= MAX_REWARDED_PER_DAY) return;
+
+  const overlay = document.getElementById('rewarded-overlay');
+  const countdown = document.getElementById('ad-countdown');
+  const progressFill = document.getElementById('ad-progress-fill');
+  const skipBtn = document.getElementById('skip-btn');
+  const placeholder = document.getElementById('ad-placeholder');
+
+  overlay.classList.add('show');
+  skipBtn.disabled = true;
+  skipBtn.classList.remove('active');
+  skipBtn.textContent = 'SALTA (disponibile a fine video)';
+  progressFill.style.width = '0%';
+  countdown.textContent = AD_DURATION + 's';
+
+  // Trigger AdSense rewarded ad (real integration)
+  try {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  } catch(e) {}
+
+  // Show placeholder while ad loads
+  if (placeholder) placeholder.style.display = 'flex';
+
+  // Simulate ad playback + countdown
+  let elapsed = 0;
+  const interval = 100; // ms
+  const totalMs = AD_DURATION * 1000;
+
+  adTimer = setInterval(() => {
+    elapsed += interval;
+    const pct = Math.min((elapsed / totalMs) * 100, 100);
+    progressFill.style.width = pct + '%';
+    const secsLeft = Math.ceil((totalMs - elapsed) / 1000);
+    countdown.textContent = secsLeft + 's';
+
+    // Enable skip after 5 seconds
+    if (elapsed >= 5000 && skipBtn.disabled) {
+      skipBtn.disabled = false;
+      skipBtn.classList.add('active');
+      skipBtn.textContent = 'SALTA →';
+    }
+
+    if (elapsed >= totalMs) {
+      clearInterval(adTimer);
+      grantRewardedSpin();
+    }
+  }, interval);
+}
+
+function skipAd() {
+  const skipBtn = document.getElementById('skip-btn');
+  if (skipBtn.disabled) return;
+  clearInterval(adTimer);
+  grantRewardedSpin();
+}
+
+function grantRewardedSpin() {
+  const overlay = document.getElementById('rewarded-overlay');
+  overlay.classList.remove('show');
+
+  fetch('/api/rewarded-spin', { method: 'POST', headers: {'Content-Type': 'application/json'} })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        state.spins = data.spins;
+        state.rewardedToday = data.rewarded_today;
+        updateUI();
+        showToast('🎰 +1 Spin gratuito sbloccato!');
+        launchConfetti();
+      } else {
+        showToast('⚠️ ' + (data.error || 'Errore'));
+      }
+    })
+    .catch(() => showToast('⚠️ Errore di rete'));
+}
+
+// Close rewarded overlay on backdrop click
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('rewarded-overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      clearInterval(adTimer);
+      document.getElementById('rewarded-overlay').classList.remove('show');
+    }
+  });
+});
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// STREAK DOTS
+// ============================================================
+function renderStreakDays() {
+  const streak = {{ user.streak }};
+  const container = document.getElementById('streak-days');
+  if (!container) return;
+  const days = ['L','M','M','G','V','S','D'];
+  // Show last 7 days, mark done up to streak count
+  const show = Math.min(streak, 7);
+  let html = '';
+  for (let i = 1; i <= 7; i++) {
+    let cls = 'streak-day';
+    if (i < show) cls += ' done';
+    else if (i === show) cls += ' today done';
+    html += `<div class="${cls}">${i === show ? '🔥' : (i < show ? '✓' : i)}</div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ============================================================
+// REFERRAL
+// ============================================================
+function copyReferral() {
+  const input = document.getElementById('referral-link-input');
+  navigator.clipboard.writeText(input.value)
+    .then(() => showToast('✅ Link copiato!'))
+    .catch(() => {
+      input.select();
+      document.execCommand('copy');
+      showToast('✅ Link copiato!');
+    });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  drawWheel();
+  renderPrizeList();
+  renderLeaderboard();
+  renderHistory();
+  renderStreakDays();
+  updateUI();
+
+  // Il reset giornaliero è gestito lato server
+  setInterval(renderLeaderboard, 30000);
+}
+
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
