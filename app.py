@@ -308,6 +308,10 @@ def admin_stats():
             "top":       [dict(r) for r in conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 5").fetchall()],
         })
 
+# ── INIT DB AL CARICAMENTO DEL MODULO ────────
+# Necessario per gunicorn (su Render non esegue __main__)
+init_db()
+
 @app.route("/privacy")
 def privacy(): return render_template("privacy.html")
 

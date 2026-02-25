@@ -8,7 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- Google AdSense placeholder -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<!-- ============================================================
+     AD NETWORK CONFIGURATION
+     Istruzioni:
+     1. Adsterra: registrati su adsterra.com → Publisher → aggiungi sito
+        → copia il tuo ADSTERRA_BANNER_KEY e ADSTERRA_POPUNDER_KEY
+     2. Monetag: registrati su monetag.com → aggiungi sito
+        → copia il tuo MONETAG_PUBLISHER_ID
+     3. AdSense (opzionale): sostituisci ca-pub-XXXXXXXX con il tuo ID
+     ============================================================ -->
+
+<!-- ADSTERRA Social Bar (carica su tutte le pagine, altissimo CPM) -->
+<!-- SOSTITUISCI: incolla qui lo script Social Bar dal tuo account Adsterra -->
+<!-- <script async="async" data-cfasync="false" src="//pl00000000.profitablecpmrate.com/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/invoke.js"></script> -->
+
+<!-- MONETAG (rewarded video + banner) -->
+<!-- SOSTITUISCI: incolla qui lo script dal tuo account Monetag -->
+<!-- <script src="https://alwingulla.com/88/tag.min.js" data-zone="XXXXXX" async data-cfasync="false"></script> -->
+
+<!-- GOOGLE ADSENSE (quando approvato) -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 
 <style>
   :root {
@@ -1147,10 +1166,17 @@
       <!-- ADS LEFT -->
       <div class="panel-card">
         <div class="adsense-slot" style="min-height:250px;">
-          <ins class="adsbygoogle"
-               style="display:block;width:250px;height:250px"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-               data-ad-slot="0987654321"></ins>
+          <!-- ═══ SLOT 2 · SIDEBAR 300×250 ════════════════════════
+               Adsterra: incolla qui lo script banner 300x250
+               AdSense:  <ins class="adsbygoogle" style="display:block;width:300px;height:250px"
+                               data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          ═══════════════════════════════════════════════════ -->
+          <div style="width:100%;height:250px;background:rgba(255,255,255,0.02);
+                      border:1px dashed rgba(255,255,255,0.07);border-radius:4px;
+                      display:flex;align-items:center;justify-content:center;
+                      color:#2a2a45;font-size:0.65rem;letter-spacing:1px;">
+            SLOT 2 · 300×250 · Adsterra / AdSense
+          </div>
         </div>
       </div>
 
@@ -1296,10 +1322,17 @@
   <!-- BOTTOM AD BANNER -->
   <div class="ad-bottom">
     <div class="adsense-slot" style="max-width:970px; margin:0 auto;">
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:970px;height:90px"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="1122334455"></ins>
+      <!-- ═══ SLOT 3 · BOTTOM BANNER 970×90 ═══════════════════
+           Adsterra: incolla qui lo script banner 970x90
+           AdSense:  <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px"
+                          data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      ═══════════════════════════════════════════════════════ -->
+      <div style="width:100%;height:90px;background:rgba(255,255,255,0.02);
+                  border:1px dashed rgba(255,255,255,0.07);border-radius:4px;
+                  display:flex;align-items:center;justify-content:center;
+                  color:#2a2a45;font-size:0.65rem;letter-spacing:1px;">
+        SLOT 3 · 970×90 · Adsterra / AdSense
+      </div>
     </div>
   </div>
 
@@ -1313,11 +1346,17 @@
     <div class="result-amount" id="result-amount">500</div>
     <div class="result-unit">FIFA COINS</div>
     <!-- INTERSTITIAL AD (attiva dopo aver configurato AdSense) -->
+    <!-- ═══ SLOT 4 · INTERSTITIAL (nel popup risultato) ════
+         Adsterra Interstitial: attiva dopo registrazione
+         Monetag:  sostituisci con il tuo script Monetag
+    ═══════════════════════════════════════════════════════ -->
     <div class="interstitial-ad" id="interstitial-ad-slot" style="display:none;">
-      <ins class="adsbygoogle"
-           style="display:block;width:300px;height:60px"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="9988776655"></ins>
+      <div style="width:300px;height:60px;background:rgba(255,255,255,0.02);
+                  border:1px dashed rgba(255,255,255,0.07);border-radius:4px;
+                  display:flex;align-items:center;justify-content:center;
+                  color:#2a2a45;font-size:0.6rem;letter-spacing:1px;">
+        SLOT 4 · 300×60 · Monetag / AdSense
+      </div>
     </div>
     <button class="close-result-btn" onclick="closeResult()">CONTINUA →</button>
   </div>
@@ -1342,13 +1381,16 @@
 
     <!-- AD PLAYER: in produzione inserisci qui l'Ad Unit Rewarded di AdSense/AdMob -->
     <div class="ad-player" id="ad-player">
-      <!-- Google AdSense Rewarded Ad Unit (sostituisci con il tuo slot) -->
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="REWARDED_SLOT_ID"
-           data-ad-format="rewarded"
-           data-full-width-responsive="true"></ins>
+      <!-- ═══ SLOT 5 · REWARDED VIDEO ════════════════════════
+           MONETAG (consigliato, approvazione 24h):
+             Dopo registrazione su monetag.com, sostituisci con:
+             <script src="https://alwingulla.com/88/tag.min.js"
+                     data-zone="IL_TUO_ZONE_ID" async data-cfasync="false"></script>
+
+           AdSense Rewarded (se già approvato):
+             <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXXXXX"
+                  data-ad-slot="XXXXXXXXXX" data-ad-format="rewarded"></ins>
+      ═══════════════════════════════════════════════════════ -->
       <!-- Fallback visivo mentre l'ad carica -->
       <div id="ad-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:12px;color:#555;">
         <div style="font-size:2.5rem">🎮</div>
@@ -1761,7 +1803,8 @@ function startRewardedAd() {
 
   // Trigger AdSense rewarded ad (real integration)
   try {
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    // Ad init — decommenta quando configuri AdSense
+    // (adsbygoogle = window.adsbygoogle || []).push({});
   } catch(e) {}
 
   // Show placeholder while ad loads
