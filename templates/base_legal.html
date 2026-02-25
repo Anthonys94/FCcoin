@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FUT SPIN - Gira la ruota e vinci FIFA Coins virtuali gratis ogni giorno. Accumula coins, scala la leaderboard e sfida i tuoi amici.">
+<title>{% block title %}FUT SPIN{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700; --gold2: #FFA500; --dark: #0a0a0f;
+    --card: #1a1a28; --accent: #00e5ff; --green: #00ff88;
+    --text: #e8e8f0; --muted: #6b6b8a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--dark); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid rgba(255,215,0,0.12);
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+  .logo span { -webkit-text-fill-color: var(--accent); }
+  .nav-link {
+    color: var(--muted); text-decoration: none; font-weight: 600;
+    font-size: 0.9rem; transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--gold); }
+
+  .page-container { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .page-hero {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,215,0,0.1);
+  }
+  .page-label {
+    font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; margin-bottom: 8px;
+  }
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    letter-spacing: 3px; line-height: 1;
+  }
+  .page-date { color: var(--muted); font-size: 0.85rem; margin-top: 8px; }
+
+  .content h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 2px;
+    color: var(--gold); margin: 36px 0 12px;
+  }
+  .content h2:first-child { margin-top: 0; }
+  .content p { color: #b0b0c8; line-height: 1.8; margin-bottom: 14px; font-size: 0.95rem; }
+  .content ul { padding-left: 20px; margin-bottom: 14px; }
+  .content ul li { color: #b0b0c8; line-height: 1.9; font-size: 0.95rem; }
+  .content a { color: var(--accent); text-decoration: none; }
+  .content a:hover { text-decoration: underline; }
+
+  .highlight-box {
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 12px; padding: 16px 20px; margin: 20px 0;
+  }
+  .highlight-box p { margin: 0; }
+
+  footer {
+    text-align: center; padding: 32px 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--muted); font-size: 0.82rem;
+  }
+  footer a { color: var(--muted); text-decoration: none; margin: 0 12px; transition: color 0.2s; }
+  footer a:hover { color: var(--gold); }
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+<nav>
+  <a class="logo" href="/">FUT <span>SPIN</span></a>
+  <a class="nav-link" href="/">← Torna al gioco</a>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <div>© 2026 FUT SPIN · Non affiliato con EA Sports</div>
+  <div style="margin-top:8px;">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Termini di Servizio</a>
+    <a href="/come-funziona">Come Funziona</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,288 @@
+{% extends "base_legal.html" %}
+{% block title %}Come Funziona — FUT SPIN{% endblock %}
+
+{% block extra_style %}
+<style>
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .step-card {
+    background: var(--card);
+    border: 1px solid rgba(255,215,0,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: rgba(255,215,0,0.15);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 12px; }
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .step-desc { color: #b0b0c8; font-size: 0.88rem; line-height: 1.7; }
+
+  .prizes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  .prizes-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(255,215,0,0.15);
+  }
+  .prizes-table td {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    color: #b0b0c8;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .prizes-table tr:last-child td { border-bottom: none; }
+  .prizes-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .prob-bar-bg {
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    height: 6px;
+    width: 120px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+  .prob-bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); border-radius: 4px; }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 0;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+  .faq-a { color: #b0b0c8; font-size: 0.88rem; line-height: 1.7; }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.05));
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 48px;
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    border-radius: 50px;
+    text-decoration: none;
+    margin-top: 16px;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); text-decoration: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+  <div class="page-hero">
+    <div class="page-label">Guida al gioco</div>
+    <h1 class="page-title">Come Funziona <span style="background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">FUT SPIN</span></h1>
+    <p style="color:#b0b0c8;margin-top:12px;font-size:1rem;line-height:1.7;">FUT SPIN è una piattaforma di intrattenimento gratuita dove puoi girare una ruota della fortuna ogni giorno e accumulare FIFA Coins virtuali. Più giri, più coins accumuli, più sali in classifica.</p>
+  </div>
+
+  <div class="content">
+
+    <h2>Come si Gioca</h2>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">👤</div>
+        <div class="step-title">Registrati Gratis</div>
+        <div class="step-desc">Crea il tuo account in 30 secondi con username e password. Nessuna email richiesta. Ricevi subito 3 spin di benvenuto.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">🎰</div>
+        <div class="step-title">Gira la Ruota</div>
+        <div class="step-desc">Premi il pulsante GIRA e la ruota si mette in moto. Ogni segmento corrisponde a un premio diverso, da 200 fino a 50.000 FIFA Coins virtuali.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">🪙</div>
+        <div class="step-title">Accumula Coins</div>
+        <div class="step-desc">I coins vinti vengono aggiunti al tuo saldo. Tornando ogni giorno ricevi spin gratuiti freschi e il tuo streak aumenta con bonus extra.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <div class="step-icon">🏆</div>
+        <div class="step-title">Scala la Classifica</div>
+        <div class="step-desc">Il tuo saldo totale di FIFA Coins determina la tua posizione nella leaderboard globale. Sfida gli altri giocatori per il primo posto.</div>
+      </div>
+    </div>
+
+    <h2>I Premi della Ruota</h2>
+    <p>La ruota ha 7 premi diversi. Ogni segmento ha una probabilità di uscita basata sul suo peso. Ecco la tabella completa:</p>
+
+    <table class="prizes-table">
+      <thead>
+        <tr>
+          <th>Premio</th>
+          <th>Probabilità</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>⚽ 200 FIFA Coins</td>
+          <td>30.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td>⚽ 500 FIFA Coins</td>
+          <td>25.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:83%"></div></div></td>
+        </tr>
+        <tr>
+          <td>⚽ 1.000 FIFA Coins</td>
+          <td>20.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:67%"></div></div></td>
+        </tr>
+        <tr>
+          <td>⚽ 2.000 FIFA Coins</td>
+          <td>12.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:40%"></div></div></td>
+        </tr>
+        <tr>
+          <td>⚽ 5.000 FIFA Coins</td>
+          <td>8.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:27%"></div></div></td>
+        </tr>
+        <tr>
+          <td>⚽ 10.000 FIFA Coins</td>
+          <td>4.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:13%"></div></div></td>
+        </tr>
+        <tr>
+          <td>👑 50.000 FIFA Coins</td>
+          <td>1.0%</td>
+          <td><div class="prob-bar-bg"><div class="prob-bar" style="width:3%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Spin Gratuiti Ogni Giorno</h2>
+    <p>FUT SPIN ti regala spin gratuiti ogni giorno in tre modi diversi:</p>
+    <ul>
+      <li><strong>3 spin gratuiti</strong> — si ricaricano automaticamente ogni giorno alle mezzanotte</li>
+      <li><strong>+1 o +2 spin</strong> — guardando un breve video pubblicitario (max 2 al giorno)</li>
+      <li><strong>Bonus streak</strong> — tornando giorni consecutivi ricevi spin extra automatici</li>
+    </ul>
+
+    <h2>🔥 Sistema Daily Streak</h2>
+    <p>Il Daily Streak premia la costanza. Ogni giorno che torni su FUT SPIN il tuo streak aumenta. Più giorni consecutivi, più spin bonus ricevi gratuitamente:</p>
+    <table class="prizes-table">
+      <thead><tr><th>Streak</th><th>Bonus Spin</th></tr></thead>
+      <tbody>
+        <tr><td>2 giorni consecutivi</td><td>+1 spin</td></tr>
+        <tr><td>3 giorni</td><td>+1 spin</td></tr>
+        <tr><td>4 giorni</td><td>+2 spin</td></tr>
+        <tr><td>5 giorni</td><td>+2 spin</td></tr>
+        <tr><td>6 giorni</td><td>+3 spin</td></tr>
+        <tr><td>7+ giorni</td><td>+5 spin 🎉</td></tr>
+      </tbody>
+    </table>
+    <p>Se salti un giorno lo streak si azzera. Cerca di tornare ogni giorno per massimizzare i tuoi spin gratuiti!</p>
+
+    <h2>🎁 Sistema Referral</h2>
+    <p>Ogni account FUT SPIN ha un link di invito personale. Condividilo con i tuoi amici e guadagnate entrambi spin gratuiti:</p>
+    <ul>
+      <li>Il tuo amico che si registra con il tuo link riceve <strong>+2 spin bonus</strong></li>
+      <li>Tu ricevi <strong>+3 spin</strong> quando il tuo amico effettua il primo giro della ruota</li>
+    </ul>
+    <p>Non c'è limite al numero di amici che puoi invitare. Più amici inviti, più spin accumuli.</p>
+
+    <h2>💎 Spin a Pagamento</h2>
+    <p>Se vuoi girare di più senza aspettare il giorno successivo, puoi acquistare pacchetti di spin aggiuntivi. I pacchetti disponibili sono:</p>
+    <ul>
+      <li><strong>3 Spin Pack</strong> — €0.99</li>
+      <li><strong>10 Spin Pack</strong> — €2.49 (il più popolare)</li>
+      <li><strong>25 Spin Pack</strong> — €4.99 (miglior valore)</li>
+    </ul>
+    <p>I pagamenti sono processati in modo sicuro da Stripe. Gli spin acquistati non scadono.</p>
+
+    <h2>FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">I FIFA Coins di FUT SPIN sono reali?</div>
+      <div class="faq-a">No. I FIFA Coins su FUT SPIN sono valuta virtuale interna alla piattaforma, usata esclusivamente per la classifica e il gioco. Non hanno valore reale e non possono essere usati su EA Sports o FIFA Ultimate Team.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">FUT SPIN è affiliato con EA Sports?</div>
+      <div class="faq-a">No. FUT SPIN è un sito di intrattenimento indipendente e non ha alcun rapporto con Electronic Arts Inc. I nomi FIFA e EA FC sono marchi registrati di EA Sports.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Posso accedere da qualsiasi dispositivo?</div>
+      <div class="faq-a">Sì. Il tuo account è salvato sul server. Puoi accedere da PC, smartphone o tablet con le stesse credenziali e trovare tutti i tuoi coins e lo streak aggiornato.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Cosa succede se salto un giorno di streak?</div>
+      <div class="faq-a">Lo streak si azzera a 1. Non perdi i coins già accumulati, perdi solo il contatore dei giorni consecutivi e i relativi bonus spin futuri.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Come funzionano gli spin con video?</div>
+      <div class="faq-a">Clicca su "Guarda un video → +1 Spin", guarda un breve annuncio pubblicitario fino alla fine (circa 30 secondi) e ricevi uno spin gratuito aggiuntivo. Puoi farlo massimo 2 volte al giorno.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Posso avere un rimborso sugli spin acquistati?</div>
+      <div class="faq-a">Puoi richiedere un rimborso per spin non utilizzati entro 14 giorni dall'acquisto scrivendo a support@futspin.com.</div>
+    </div>
+
+  </div>
+
+  <div class="cta-box">
+    <div class="cta-title">Pronto a Giocare?</div>
+    <p style="color:#b0b0c8;font-size:0.9rem;">Registrati gratis e ricevi subito 3 spin di benvenuto</p>
+    <a href="/register" class="cta-btn">INIZIA GRATIS →</a>
+  </div>
+
+</div>
+{% endblock %}

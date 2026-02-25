@@ -308,6 +308,15 @@ def admin_stats():
             "top":       [dict(r) for r in conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 5").fetchall()],
         })
 
+@app.route("/privacy")
+def privacy(): return render_template("privacy.html")
+
+@app.route("/terms")
+def terms(): return render_template("terms.html")
+
+@app.route("/come-funziona")
+def how_it_works(): return render_template("how_it_works.html")
+
 if __name__ == "__main__":
     init_db()
     port  = int(os.environ.get("PORT", 5001))
