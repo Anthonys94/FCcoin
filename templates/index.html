@@ -91,7 +91,7 @@
 
   .logo span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
 
-  .header-right { display: flex; align-items: center; gap: 20px; }
+  .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
   /* WITHDRAW BUTTON */
   .withdraw-btn {
@@ -373,12 +373,141 @@
     align-items: start;
   }
 
-  @media (max-width: 900px) {
-    .spin-layout {
-      grid-template-columns: 1fr;
-    }
-    .side-panel { display: none; }
+  /* ═══════════════════════════════════════════════
+   RESPONSIVE — TABLET (max 900px)
+═══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .spin-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
+
+  .side-panel { display: block; width: 100%; }
+
+  header { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+  .header-right { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .logo { font-size: 1.4rem; }
+
+  .ad-banner-top { display: none; }
+
+  /* RUOTA PRIMA — flex column con order */
+  .spin-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .wheel-section { order: 1; }
+  .spin-layout > .side-panel:first-child { order: 2; }
+  .spin-layout > .side-panel:last-child { order: 3; }
+
+  /* Pannelli side affiancati su tablet */
+  .spin-layout > .side-panel {
+    width: 100%;
+  }
+
+  .main-container { padding: 16px 12px 40px; }
+  .page-title { font-size: 2rem; }
+  .page-subtitle { font-size: 0.8rem; }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE (max 600px)
+═══════════════════════════════════════════════ */
+@media (max-width: 600px) {
+
+  /* Header mobile */
+  header {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .logo { font-size: 1.2rem; letter-spacing: 2px; }
+  .header-right { gap: 6px; }
+  .spins-badge, .coin-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+  .withdraw-btn {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+  /* Nascondi username su mobile piccolo */
+  .header-right > div:first-child { display: none; }
+  /* Nascondi "Esci" testo, mostra icona */
+  .logout-link { padding: 5px 10px !important; font-size: 0.72rem !important; }
+
+  /* Main container */
+  .main-container { padding: 12px 10px 60px; }
+  .page-title { font-size: 1.6rem; margin-bottom: 4px; }
+  .page-subtitle { font-size: 0.72rem; margin-bottom: 8px; }
+
+  /* Ruota più piccola */
+  .wheel-wrapper { width: 300px !important; height: 300px !important; }
+  #wheel { width: 300px !important; height: 300px !important; }
+  .wheel-outer-ring { inset: -6px !important; }
+
+  /* Spin button */
+  .spin-btn {
+    font-size: 1.8rem;
+    padding: 14px 50px;
+    letter-spacing: 3px;
+  }
+  .free-spin-label { font-size: 0.72rem; padding: 6px 14px; }
+  .spin-cost { font-size: 0.72rem; }
+
+  /* Watch ad button */
+  .watch-ad-btn { font-size: 0.8rem; padding: 10px 20px; }
+
+  /* Pannelli su mobile: 1 colonna */
+  .side-panel { width: 100%; }
+  .panel-card { padding: 14px 16px; margin-bottom: 10px; }
+  .panel-title { font-size: 0.75rem; margin-bottom: 10px; }
+
+  /* Streak compatto */
+  .streak-banner { gap: 8px; }
+  .streak-title { font-size: 0.8rem; }
+  .streak-sub { font-size: 0.65rem; }
+
+  /* Leaderboard */
+  .lb-item { font-size: 0.8rem; padding: 6px 0; }
+
+  /* Referral */
+  .referral-link-input { font-size: 0.7rem; }
+  .copy-btn { font-size: 0.65rem; padding: 6px 10px; }
+  .referral-stats { gap: 6px; }
+  .referral-stat-box { padding: 8px 6px; }
+  .referral-stat-num { font-size: 1.1rem; }
+
+  /* Slot ads sidebar nascosti su mobile */
+  .adsense-slot { display: none; }
+
+  /* Bottom ad più piccolo */
+  .ad-bottom { padding: 8px 0; }
+
+  /* History strip */
+  .history-strip { gap: 4px; margin-bottom: 10px; }
+  .history-chip { font-size: 0.65rem; padding: 3px 8px; }
+
+  /* Popup result */
+  .result-card { padding: 32px 24px; }
+  .result-amount { font-size: 3.5rem; }
+
+  /* Withdraw popup */
+  .withdraw-card { padding: 28px 20px; }
+  .withdraw-title { font-size: 1.6rem; }
+
+  /* Rewarded overlay */
+  .rewarded-box { padding: 28px 20px; }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE XS (max 380px)
+═══════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .wheel-wrapper { width: 260px !important; height: 260px !important; }
+  #wheel { width: 260px !important; height: 260px !important; }
+  .spin-btn { font-size: 1.5rem; padding: 12px 36px; }
+  .logo { font-size: 1rem; }
+}
 
   /* WHEEL CONTAINER */
   .wheel-section {
@@ -386,17 +515,17 @@
     flex-direction: column;
     align-items: center;
     gap: 24px;
+    width: 100%;
   }
 
   .wheel-wrapper {
     position: relative;
     width: 380px;
     height: 380px;
+    max-width: 100%;
   }
 
-  @media (max-width: 480px) {
-    .wheel-wrapper { width: 300px; height: 300px; }
-  }
+  
 
   /* POINTER */
   .wheel-pointer {
@@ -1562,6 +1691,61 @@
   from { width: 0%; }
   to { width: 100%; }
 }
+
+/* MOBILE BOTTOM BAR */
+.mobile-bottom-bar { display: none; }
+
+@media (max-width: 900px) {
+  .mobile-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.97);
+    border-top: 1px solid rgba(255,215,0,0.15);
+    backdrop-filter: blur(20px);
+    z-index: 500;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  }
+  .mob-action-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 8px 4px;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .mob-action-btn:active { transform: scale(0.95); }
+  .mob-icon { font-size: 1.5rem; line-height: 1; margin-bottom: 2px; }
+  .mob-spin { color: var(--gold); }
+  .mob-video { color: var(--green); }
+  .mob-withdraw { color: #229ED9; }
+  .mob-count {
+    position: absolute;
+    top: 4px; right: calc(50% - 20px);
+    background: var(--gold);
+    color: #000;
+    font-size: 0.6rem;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+  }
+  .main-container { padding-bottom: 90px !important; }
+  .spin-btn { display: none !important; }
+  .watch-ad-btn { display: none !important; }
+  .withdraw-btn { display: none !important; }
+}
 </style>
 
 <!-- CONFETTI -->
@@ -1681,6 +1865,15 @@ function saveState() {
 function drawWheel() {
   const canvas = document.getElementById('wheel');
   const ctx = canvas.getContext('2d');
+  // Resize canvas to match wrapper on mobile
+  const wrapper = document.getElementById('wheel-wrapper');
+  const size = Math.min(wrapper.offsetWidth || 380, 380);
+  if (size < 380) {
+    canvas.width = size;
+    canvas.height = size;
+    wrapper.style.width = size + 'px';
+    wrapper.style.height = size + 'px';
+  }
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2, R = W / 2 - 4;
   const sliceAngle = (2 * Math.PI) / PRIZES.length;
@@ -1780,6 +1973,8 @@ function doSpin() {
 function updateUI() {
   document.getElementById('coin-count').textContent = state.coins.toLocaleString('it-IT');
   document.getElementById('spins-count').textContent = state.spins;
+  const mobSpins = document.getElementById('mob-spins');
+  if (mobSpins) mobSpins.textContent = state.spins;
 
   const label = document.getElementById('free-spin-label');
   if (state.spins > 0) {
@@ -2110,6 +2305,12 @@ function init() {
 
   // Il reset giornaliero è gestito lato server
   setInterval(renderLeaderboard, 30000);
+
+  // Ridisegna ruota su resize/orientamento
+  window.addEventListener('resize', () => {
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(drawWheel, 150);
+  });
 }
 
 window.addEventListener('load', init);
