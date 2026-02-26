@@ -1137,7 +1137,7 @@
   <div class="logo">FUT <span>SPIN</span></div>
   <div class="header-right">
     <div style="color:var(--muted);font-size:0.85rem;font-weight:600;">👤 {{ user.username }}</div>
-    <div class="spins-badge">🎰 <span id="spins-count">{{ user.spins + user.spins_extra }}</span> Spin</div>
+    <div class="spins-badge">🎰 <span id="spins-count">{{ user.spins }}</span> Spin</div>
     <div class="coin-badge"><span class="coin-icon">🪙</span> <span id="coin-count">{{ user.coins }}</span> FC</div>
     <a href="/logout" style="color:var(--muted);font-size:0.8rem;text-decoration:none;padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;transition:all 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" >Esci</a>
   </div>
@@ -1171,18 +1171,12 @@
                AdSense:  <ins class="adsbygoogle" style="display:block;width:300px;height:250px"
                                data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
           ═══════════════════════════════════════════════════ -->
-            {% raw %}
-            <script>
-                atOptions = {
-                    'key': '299c9259ba8be6e673c73bd9edd7c7c0',
-                    'format': 'iframe',
-                    'height': 250,
-                    'width': 300,
-                    'params': {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/299c9259ba8be6e673c73bd9edd7c7c0/invoke.js"></script>
-            {% endraw %}
+          <div style="width:100%;height:250px;background:rgba(255,255,255,0.02);
+                      border:1px dashed rgba(255,255,255,0.07);border-radius:4px;
+                      display:flex;align-items:center;justify-content:center;
+                      color:#2a2a45;font-size:0.65rem;letter-spacing:1px;">
+            SLOT 2 · 300×250 · Adsterra / AdSense
+          </div>
         </div>
       </div>
 
@@ -1200,7 +1194,7 @@
       <div class="free-spin-label" id="free-spin-label">🎁 HAI 3 SPIN GRATUITI</div>
 
       <button class="spin-btn" id="spin-btn" onclick="doSpin()">GIRA!</button>
-      <div class="spin-cost" id="spin-cost">Gratis oggi · poi €0.49/spin</div>
+      <div class="spin-cost" id="spin-cost">🎁 1 spin gratuito al giorno + 2 con video</div>
 
       <!-- WATCH AD FOR FREE SPIN -->
       <button class="watch-ad-btn" id="watch-ad-btn" onclick="startRewardedAd()">
@@ -1240,22 +1234,7 @@
         <div id="leaderboard"></div>
       </div>
 
-      <!-- BUY SPINS -->
-      <div class="panel-card">
-        <div class="panel-title">💎 Compra Spin</div>
-        <button class="buy-spin-btn" onclick="openBuyModal(3, 0.99)">
-          <span>3 Spin Pack</span>
-          <span class="buy-price">€0.99</span>
-        </button>
-        <button class="buy-spin-btn" onclick="openBuyModal(10, 2.49)">
-          <span>10 Spin Pack 🔥</span>
-          <span class="buy-price">€2.49</span>
-        </button>
-        <button class="buy-spin-btn" onclick="openBuyModal(25, 4.99)">
-          <span>25 Spin Pack 👑</span>
-          <span class="buy-price">€4.99</span>
-        </button>
-      </div>
+
 
       <!-- REFERRAL PANEL -->
       <div class="panel-card">
@@ -1368,16 +1347,7 @@
   </div>
 </div>
 
-<!-- BUY MODAL -->
-<div class="modal-overlay" id="buy-modal">
-  <div class="modal-card">
-    <div class="modal-title">💎 COMPRA SPIN</div>
-    <div class="modal-sub">Scegli il tuo pacchetto</div>
-    <div id="modal-packages"></div>
-    <button class="pay-btn" onclick="completePurchase()">ACQUISTA ORA</button>
-    <button class="cancel-btn" onclick="closeBuyModal()">Annulla</button>
-  </div>
-</div>
+
 
 <!-- REWARDED AD MODAL -->
 <div class="rewarded-overlay" id="rewarded-overlay">
@@ -1484,7 +1454,7 @@ const MAX_REWARDED_PER_DAY = 2;
 // State popolato dal server via Jinja2
 let state = {
   coins: {{ user.coins }},
-  spins: {{ user.spins + user.spins_extra }},
+  spins: {{ user.spins }},
   rewardedToday: {{ user.rewarded_today }},
   history: [{% for h in history %}{"label":"{{ h.label }}","coins":{{ h.coins_won }}}{% if not loop.last %},{% endif %}{% endfor %}],
   spinning: false,
@@ -1547,7 +1517,7 @@ function pickPrize() {
 function doSpin() {
   if (state.spinning) return;
   if (state.spins <= 0) {
-    openBuyModal();
+    showToast('⏰ Hai esaurito gli spin! Torna domani o guarda un video.');
     return;
   }
 
@@ -1578,7 +1548,7 @@ function doSpin() {
       // Aggiorna state con dati reali dal server
       if (data.success) {
         state.coins = data.coins;
-        state.spins = data.spins + data.spins_extra;
+        state.spins = data.spins;
       }
     })
     .catch(() => {});
@@ -1614,7 +1584,7 @@ function updateUI() {
   }
 
   const costEl = document.getElementById('spin-cost');
-  costEl.textContent = state.spins > 0 ? 'Gratis oggi · poi €0.49/spin' : 'Acquista spin per continuare';
+  costEl.textContent = state.spins > 0 ? `🎁 Spin gratuito disponibile` : '⏰ Torna domani per il tuo spin!';
 
   // Watch Ad button state
   const used = state.rewardedToday;
@@ -1704,66 +1674,6 @@ function renderLeaderboard() {
 // ============================================================
 // BUY MODAL
 // ============================================================
-const PACKAGES = [
-  { spins: 3,  price: 0.99,  label: '3 Spin Pack',   desc: 'Entry level' },
-  { spins: 10, price: 2.49,  label: '10 Spin Pack',  desc: '🔥 Più popolare' },
-  { spins: 25, price: 4.99,  label: '25 Spin Pack',  desc: '👑 Miglior valore' },
-];
-
-let buyAmount = null;
-
-function openBuyModal(spins, price) {
-  const modal = document.getElementById('buy-modal');
-  const pkgs = document.getElementById('modal-packages');
-  pkgs.innerHTML = PACKAGES.map(p => `
-    <div class="pkg-option ${p.spins === spins ? 'selected' : ''}" onclick="selectPkg(this, ${p.spins}, ${p.price})">
-      <div class="pkg-label">${p.label}<span>${p.desc}</span></div>
-      <div class="pkg-price">€${p.price}</div>
-    </div>
-  `).join('');
-  buyAmount = { spins, price };
-  modal.classList.add('show');
-}
-
-function selectPkg(el, spins, price) {
-  document.querySelectorAll('.pkg-option').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-  buyAmount = { spins, price };
-}
-
-function closeBuyModal() {
-  document.getElementById('buy-modal').classList.remove('show');
-}
-
-function completePurchase() {
-  if (!buyAmount) return;
-  // In produzione: redirect to Stripe/PayPal
-  fetch('/api/create-checkout', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(buyAmount),
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.url) window.location.href = data.url;
-    else {
-      // DEMO: add spins directly
-      state.spins += buyAmount.spins;
-      saveState();
-      updateUI();
-      closeBuyModal();
-      showToast(`✅ ${buyAmount.spins} spin aggiunti!`);
-    }
-  })
-  .catch(() => {
-    state.spins += buyAmount.spins;
-    saveState();
-    updateUI();
-    closeBuyModal();
-    showToast(`✅ ${buyAmount.spins} spin aggiunti (demo)!`);
-  });
-}
-
 // ============================================================
 // CONFETTI
 // ============================================================

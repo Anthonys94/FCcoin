@@ -15,13 +15,6 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "futspin-secret-cambia-in-produzione")
 DB_PATH = "futspin.db"
 
-try:
-    import stripe
-    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "")
-    STRIPE_AVAILABLE = bool(stripe.api_key)
-except ImportError:
-    STRIPE_AVAILABLE = False
-
 PRIZES = [
     {"label": "200 FC",  "coins": 200,   "weight": 30},
     {"label": "500 FC",  "coins": 500,   "weight": 25},
@@ -33,13 +26,7 @@ PRIZES = [
     {"label": "MISS!",   "coins": 0,     "weight": 0},
 ]
 
-SPIN_PACKAGES = {
-    "3":  {"spins": 3,  "price": 99,  "name": "3 Spin Pack"},
-    "10": {"spins": 10, "price": 249, "name": "10 Spin Pack"},
-    "25": {"spins": 25, "price": 499, "name": "25 Spin Pack"},
-}
-
-FREE_SPINS_PER_DAY   = 3
+FREE_SPINS_PER_DAY   = 1
 MAX_REWARDED_PER_DAY = 2
 STREAK_REWARDS = {2:1, 3:1, 4:2, 5:2, 6:3, 7:5}
 STREAK_MAX_BONUS = 5
@@ -129,7 +116,7 @@ def check_referral_reward(user_id):
     with get_db() as conn:
         user = conn.execute("SELECT referred_by, referral_rewarded FROM users WHERE id=?", (user_id,)).fetchone()
         if user["referred_by"] and not user["referral_rewarded"]:
-            conn.execute("UPDATE users SET spins_extra=spins_extra+? WHERE id=?", (REFERRAL_REWARD_INVITANTE, user["referred_by"]))
+            conn.execute("UPDATE users SET spins=spins+? WHERE id=?", (REFERRAL_REWARD_INVITANTE, user["referred_by"]))
             conn.execute("UPDATE users SET referral_rewarded=1 WHERE id=?", (user_id,))
             conn.execute("UPDATE referrals SET rewarded=1 WHERE inviter_id=? AND invitee_id=?", (user["referred_by"], user_id))
 
@@ -228,21 +215,16 @@ def api_spin():
     check_daily_reset(user_id)
     with get_db() as conn:
         user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
-        if user["spins"] + user["spins_extra"] <= 0:
+        if user["spins"] <= 0:
             return jsonify({"error": "Nessuno spin disponibile"}), 400
         segs = []
         for i, p in enumerate(PRIZES): segs.extend([i]*p["weight"])
         prize = PRIZES[random.choice(segs)]
-        if user["spins_extra"] > 0:
-            conn.execute("UPDATE users SET spins_extra=spins_extra-1, coins=coins+? WHERE id=?", (prize["coins"], user_id))
-            stype = "paid"
-        else:
-            conn.execute("UPDATE users SET spins=spins-1, coins=coins+? WHERE id=?", (prize["coins"], user_id))
-            stype = "free"
-        conn.execute("INSERT INTO spin_log (user_id,coins_won,label,spin_type) VALUES (?,?,?,?)", (user_id, prize["coins"], prize["label"], stype))
+        conn.execute("UPDATE users SET spins=spins-1, coins=coins+? WHERE id=?", (prize["coins"], user_id))
+        conn.execute("INSERT INTO spin_log (user_id,coins_won,label,spin_type) VALUES (?,?,?,?)", (user_id, prize["coins"], prize["label"], 'free'))
         user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
     check_referral_reward(user_id)
-    return jsonify({"success":True, "prize":prize, "coins":user["coins"], "spins":user["spins"], "spins_extra":user["spins_extra"]})
+    return jsonify({"success":True, "prize":prize, "coins":user["coins"], "spins":user["spins"]})
 
 @app.route("/api/rewarded-spin", methods=["POST"])
 @login_required
@@ -263,39 +245,7 @@ def api_leaderboard():
         rows = conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 10").fetchall()
     return jsonify([{"username":r["username"],"coins":r["coins"],"streak":r["streak"]} for r in rows])
 
-@app.route("/api/create-checkout", methods=["POST"])
-@login_required
-def create_checkout():
-    body = request.get_json(silent=True) or {}
-    pkg  = SPIN_PACKAGES.get(str(body.get("spins","3")))
-    if not pkg: return jsonify({"error":"Pacchetto non valido"}), 400
-    if not STRIPE_AVAILABLE:
-        with get_db() as conn:
-            conn.execute("UPDATE users SET spins_extra=spins_extra+? WHERE id=?", (pkg["spins"], session["user_id"]))
-        return jsonify({"url":None,"demo":True,"spins":pkg["spins"]})
-    try:
-        cs = stripe.checkout.Session.create(
-            payment_method_types=["card"],
-            line_items=[{"price_data":{"currency":"eur","unit_amount":pkg["price"],"product_data":{"name":pkg["name"]}},"quantity":1}],
-            mode="payment",
-            success_url=url_for("payment_success", spins=pkg["spins"], _external=True),
-            cancel_url=url_for("index", _external=True),
-        )
-        return jsonify({"url":cs.url})
-    except Exception as e:
-        return jsonify({"error":str(e)}), 500
 
-@app.route("/success")
-@login_required
-def payment_success():
-    spins = request.args.get("spins",0,type=int)
-    if spins > 0:
-        with get_db() as conn:
-            conn.execute("UPDATE users SET spins_extra=spins_extra+? WHERE id=?", (spins, session["user_id"]))
-    return redirect(url_for("index"))
-
-@app.route("/cancel")
-def payment_cancel(): return redirect(url_for("index"))
 
 @app.route("/admin/stats")
 def admin_stats():
