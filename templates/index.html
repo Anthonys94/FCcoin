@@ -58,6 +58,7 @@
     content: '';
     position: fixed;
     inset: 0;
+    pointer-events: none;
     background:
       radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,215,0,0.08) 0%, transparent 60%),
       radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,229,255,0.05) 0%, transparent 50%);
@@ -550,18 +551,14 @@
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
-    z-index: 999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
+    z-index: 9999;
   }
 
   .result-popup.show {
-    opacity: 1;
-    pointer-events: all;
+    display: flex;
   }
 
   .result-card {
@@ -573,13 +570,12 @@
     max-width: 420px;
     width: 90%;
     box-shadow: 0 0 60px rgba(255,215,0,0.3);
-    transform: scale(0.8);
-    transition: transform 0.3s;
+    transform: scale(1);
     position: relative;
     overflow: hidden;
   }
 
-  .result-popup.show .result-card { transform: scale(1); }
+  
 
   .result-card::before {
     content: '';
@@ -1343,7 +1339,7 @@
         SLOT 4 · 300×60 · Monetag / AdSense
       </div>
     </div>
-    <button class="close-result-btn" onclick="closeResult()">CONTINUA →</button>
+    <button class="close-result-btn" onclick="closeResult()" style="position:relative;z-index:10000;cursor:pointer;">CONTINUA →</button>
   </div>
 </div>
 
@@ -1605,13 +1601,16 @@ function showResult(prize) {
   document.getElementById('result-icon').textContent = prize.coins > 0 ? (prize.coins >= 10000 ? '👑' : '🏆') : '😞';
   document.getElementById('result-title').textContent = prize.coins > 0 ? 'HAI VINTO!' : 'PECCATO!';
   document.getElementById('result-amount').textContent = prize.coins > 0 ? prize.coins.toLocaleString('it-IT') : '0';
+  popup.style.display = 'flex';
   popup.classList.add('show');
 
   if (prize.coins > 0) launchConfetti();
 }
 
 function closeResult() {
-  document.getElementById('result-popup').classList.remove('show');
+  const popup = document.getElementById('result-popup');
+  popup.classList.remove('show');
+  popup.style.display = 'none';
   document.getElementById('confetti-container').innerHTML = '';
 }
 
