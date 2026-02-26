@@ -125,6 +125,9 @@ def check_referral_reward(user_id):
 @login_required
 def index():
     user = get_current_user()
+    if user is None:
+        session.clear()
+        return redirect(url_for("login"))
     check_daily_reset(user["id"])
     user = get_current_user()
     with get_db() as conn:
