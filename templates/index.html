@@ -93,6 +93,172 @@
 
   .header-right { display: flex; align-items: center; gap: 20px; }
 
+  /* WITHDRAW BUTTON */
+  .withdraw-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
+    border: 1px solid rgba(0,255,136,0.4);
+    border-radius: 50px;
+    color: var(--green);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .withdraw-btn:hover {
+    background: rgba(0,255,136,0.2);
+    border-color: var(--green);
+    transform: translateY(-1px);
+  }
+  .withdraw-btn.disabled-btn {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* WITHDRAW POPUP */
+  .withdraw-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .withdraw-popup.show { display: flex; }
+
+  .withdraw-card {
+    background: var(--card);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+  }
+  .withdraw-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 24px 24px 0 0;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+  }
+  .withdraw-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .withdraw-sub {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 28px;
+  }
+  .withdraw-coins-display {
+    background: rgba(0,255,136,0.06);
+    border: 1px solid rgba(0,255,136,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .withdraw-coins-display .wc-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .withdraw-coins-display .wc-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--green);
+    letter-spacing: 2px;
+  }
+  .withdraw-coins-display .wc-unit {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .withdraw-min-info {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .withdraw-min-info strong { color: var(--text); }
+  .withdraw-locked {
+    background: rgba(255,51,102,0.08);
+    border: 1px solid rgba(255,51,102,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    color: #ff6688;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .withdraw-locked .lock-icon { font-size: 2rem; margin-bottom: 8px; }
+  .progress-bar-bg {
+    background: rgba(255,255,255,0.06);
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+    margin: 10px 0 6px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #ff3366, var(--gold));
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .telegram-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #229ED9, #1a8fc4);
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-bottom: 12px;
+  }
+  .telegram-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+  .withdraw-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+    font-family: 'Barlow', sans-serif;
+  }
+  .withdraw-close:hover { color: var(--text); }
+
   .coin-badge {
     display: flex;
     align-items: center;
@@ -551,14 +717,18 @@
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
   }
 
   .result-popup.show {
-    display: flex;
+    opacity: 1;
+    pointer-events: all;
   }
 
   .result-card {
@@ -570,12 +740,13 @@
     max-width: 420px;
     width: 90%;
     box-shadow: 0 0 60px rgba(255,215,0,0.3);
-    transform: scale(1);
+    transform: scale(0.8);
+    transition: transform 0.3s;
     position: relative;
     overflow: hidden;
   }
 
-  
+  .result-popup.show .result-card { transform: scale(1); }
 
   .result-card::before {
     content: '';
@@ -1135,6 +1306,9 @@
     <div style="color:var(--muted);font-size:0.85rem;font-weight:600;">👤 {{ user.username }}</div>
     <div class="spins-badge">🎰 <span id="spins-count">{{ user.spins }}</span> Spin</div>
     <div class="coin-badge"><span class="coin-icon">🪙</span> <span id="coin-count">{{ user.coins }}</span> FC</div>
+    <button class="withdraw-btn" id="withdraw-btn" onclick="openWithdraw()" title="Preleva coins">
+      💸 Preleva
+    </button>
     <a href="/logout" style="color:var(--muted);font-size:0.8rem;text-decoration:none;padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;transition:all 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" >Esci</a>
   </div>
 </header>
@@ -1339,7 +1513,7 @@
         SLOT 4 · 300×60 · Monetag / AdSense
       </div>
     </div>
-    <button class="close-result-btn" onclick="closeResult()" style="position:relative;z-index:10000;cursor:pointer;">CONTINUA →</button>
+    <button class="close-result-btn" onclick="closeResult()">CONTINUA →</button>
   </div>
 </div>
 
@@ -1393,6 +1567,50 @@
 <!-- CONFETTI -->
 <div class="confetti-container" id="confetti-container"></div>
 
+<!-- WITHDRAW POPUP -->
+<div class="withdraw-popup" id="withdraw-popup">
+  <div class="withdraw-card">
+    <div class="withdraw-title">💸 PRELIEVO</div>
+    <div class="withdraw-sub">Converti i tuoi FIFA Coins in premi reali</div>
+
+    <!-- Coins display -->
+    <div class="withdraw-coins-display">
+      <div class="wc-label">Il tuo saldo</div>
+      <div class="wc-amount" id="wd-coins">0</div>
+      <div class="wc-unit">FIFA COINS</div>
+    </div>
+
+    <!-- Locked state (shown when < 200k) -->
+    <div class="withdraw-locked" id="wd-locked">
+      <div class="lock-icon">🔒</div>
+      <strong>Prelievo non disponibile</strong><br>
+      Servono almeno <strong>200.000 FC</strong> per effettuare un prelievo.<br>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="wd-progress" style="width:0%"></div>
+      </div>
+      <div class="progress-label">
+        <span id="wd-progress-label">0 FC</span>
+        <span>200.000 FC</span>
+      </div>
+    </div>
+
+    <!-- Unlocked state (shown when >= 200k) -->
+    <div class="withdraw-min-info" id="wd-unlocked" style="display:none;">
+      ✅ <strong>Prelievo disponibile!</strong><br>
+      Contattaci su Telegram per completare il prelievo.<br>
+      Il nostro team risponde entro 24 ore.
+    </div>
+
+    <!-- Telegram button (always shown, disabled if locked) -->
+    <a id="wd-telegram-btn" class="telegram-btn" href="#" target="_blank">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.869 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.829.941z"/></svg>
+      CONTATTA SU TELEGRAM
+    </a>
+
+    <button class="withdraw-close" onclick="closeWithdraw()">✕ Chiudi</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1445,6 +1663,7 @@ const MAX_REWARDED_PER_DAY = 2;
 let state = {
   coins: {{ user.coins }},
   spins: {{ user.spins }},
+  username: '{{ user.username }}',
   rewardedToday: {{ user.rewarded_today }},
   history: [{% for h in history %}{"label":"{{ h.label }}","coins":{{ h.coins_won }}}{% if not loop.last %},{% endif %}{% endfor %}],
   spinning: false,
@@ -1601,16 +1820,13 @@ function showResult(prize) {
   document.getElementById('result-icon').textContent = prize.coins > 0 ? (prize.coins >= 10000 ? '👑' : '🏆') : '😞';
   document.getElementById('result-title').textContent = prize.coins > 0 ? 'HAI VINTO!' : 'PECCATO!';
   document.getElementById('result-amount').textContent = prize.coins > 0 ? prize.coins.toLocaleString('it-IT') : '0';
-  popup.style.display = 'flex';
   popup.classList.add('show');
 
   if (prize.coins > 0) launchConfetti();
 }
 
 function closeResult() {
-  const popup = document.getElementById('result-popup');
-  popup.classList.remove('show');
-  popup.style.display = 'none';
+  document.getElementById('result-popup').classList.remove('show');
   document.getElementById('confetti-container').innerHTML = '';
 }
 
@@ -1824,6 +2040,61 @@ function copyReferral() {
       document.execCommand('copy');
       showToast('✅ Link copiato!');
     });
+}
+
+// ============================================================
+// WITHDRAW
+// ============================================================
+const WITHDRAW_MIN = 200000;
+const TELEGRAM_USERNAME = 'futspin_support'; // sostituisci con il tuo username
+
+function openWithdraw() {
+  const coins = state.coins;
+  const popup = document.getElementById('withdraw-popup');
+
+  // Update coins display
+  document.getElementById('wd-coins').textContent = coins.toLocaleString('it-IT');
+
+  const locked = document.getElementById('wd-locked');
+  const unlocked = document.getElementById('wd-unlocked');
+  const tgBtn = document.getElementById('wd-telegram-btn');
+
+  if (coins < WITHDRAW_MIN) {
+    // Locked state
+    locked.style.display = 'block';
+    unlocked.style.display = 'none';
+
+    const pct = Math.min(100, (coins / WITHDRAW_MIN) * 100).toFixed(1);
+    document.getElementById('wd-progress').style.width = pct + '%';
+    document.getElementById('wd-progress-label').textContent = coins.toLocaleString('it-IT') + ' FC';
+
+    tgBtn.style.opacity = '0.4';
+    tgBtn.style.pointerEvents = 'none';
+    tgBtn.href = '#';
+  } else {
+    // Unlocked state
+    locked.style.display = 'none';
+    unlocked.style.display = 'block';
+
+    tgBtn.style.opacity = '1';
+    tgBtn.style.pointerEvents = 'auto';
+
+    const msg = encodeURIComponent(
+      `Ciao! Vorrei effettuare un prelievo da FUT SPIN.\n` +
+      `👤 Username: ${state.username || 'N/A'}\n` +
+      `🪙 Saldo: ${coins.toLocaleString('it-IT')} FIFA Coins`
+    );
+    tgBtn.href = `https://t.me/${TELEGRAM_USERNAME}?text=${msg}`;
+  }
+
+  popup.style.display = 'flex';
+  popup.classList.add('show');
+}
+
+function closeWithdraw() {
+  const popup = document.getElementById('withdraw-popup');
+  popup.classList.remove('show');
+  popup.style.display = 'none';
 }
 
 // ============================================================
