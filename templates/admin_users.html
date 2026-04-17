@@ -1,0 +1,92 @@
+{% extends "admin_base.html" %}
+{% block title %}Utenti{% endblock %}
+
+{% block extra_style %}
+<style>
+.search-bar {
+  display:flex; gap:12px; margin-bottom:20px;
+}
+.search-bar input {
+  flex:1; background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:11px 16px; color:var(--text);
+  font-family:'Barlow',sans-serif; font-size:0.9rem;
+}
+.search-bar input:focus { outline:none; border-color:var(--gold); }
+.search-bar button {
+  padding:11px 20px; background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.2);
+  color:var(--gold); border-radius:10px; cursor:pointer; font-weight:700; font-size:0.9rem;
+}
+.user-avatar {
+  width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold));
+  display:inline-flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:0.85rem; color:#000; margin-right:10px; vertical-align:middle;
+}
+.coins-bar { display:inline-block; height:6px; border-radius:3px; background:var(--gold); vertical-align:middle; min-width:4px; }
+.pagination { display:flex; gap:8px; justify-content:center; margin-top:20px; }
+.pagination a {
+  padding:8px 14px; border-radius:8px; background:var(--card); border:1px solid var(--border);
+  color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:600;
+}
+.pagination a.active { background:rgba(255,215,0,0.1); color:var(--gold); border-color:rgba(255,215,0,0.3); }
+.pagination a:hover { color:var(--text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Utenti</h1>
+  <p>{{ total }} utenti registrati</p>
+</div>
+
+<form class="search-bar" method="GET" action="/admin/users">
+  <input type="text" name="q" value="{{ query }}" placeholder="Cerca per username…">
+  <button type="submit">🔍 Cerca</button>
+</form>
+
+<div class="card" style="padding:0">
+  {% if users %}
+  <table>
+    <thead>
+      <tr>
+        <th>Utente</th>
+        <th>Coins</th>
+        <th>Spin</th>
+        <th>Streak</th>
+        <th>Referral</th>
+        <th>Registrato</th>
+        <th>Ultimo Spin</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>
+          <span class="user-avatar">{{ u.username[0].upper() }}</span>
+          <strong>{{ u.username }}</strong>
+        </td>
+        <td>
+          <span style="color:var(--gold);font-weight:700;margin-right:8px">{{ "{:,}".format(u.coins) }}</span>
+          <span class="coins-bar" style="width:{{ [u.coins // 50000, 80]|min }}px"></span>
+        </td>
+        <td style="color:var(--accent)">{{ u.spins }}</td>
+        <td>🔥 {{ u.streak }}</td>
+        <td style="color:var(--muted)">{{ u.referral_count }}</td>
+        <td style="color:var(--muted);font-size:0.82rem">{{ u.created_at[:10] }}</td>
+        <td style="color:var(--muted);font-size:0.82rem">{{ u.last_spin_date or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Nessun utente trovato.</div>
+  {% endif %}
+</div>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+  {% for p in range(1, total_pages+1) %}
+    <a href="/admin/users?q={{ query }}&page={{ p }}" class="{% if p == page %}active{% endif %}">{{ p }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

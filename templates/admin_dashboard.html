@@ -1,0 +1,96 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <p>Panoramica generale di FUT SPIN</p>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Utenti Totali</div>
+    <div class="stat-value accent">{{ stats.users }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Spin Totali</div>
+    <div class="stat-value gold">{{ stats.spins }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">FC Coins Distribuiti</div>
+    <div class="stat-value green">{{ "{:,}".format(stats.coins_won) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Prelievi in Attesa</div>
+    <div class="stat-value red">{{ stats.pending_withdrawals }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Referral Totali</div>
+    <div class="stat-value" style="color:var(--gold2)">{{ stats.referrals }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Nuovi Oggi</div>
+    <div class="stat-value accent">{{ stats.users_today }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">🏆 Top 5 Utenti per Coins</div>
+  {% if stats.top %}
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Coins</th>
+        <th>Streak</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in stats.top %}
+      <tr>
+        <td style="color:var(--muted)">{{ loop.index }}</td>
+        <td><strong>{{ u.username }}</strong></td>
+        <td style="color:var(--gold);font-weight:700">{{ "{:,}".format(u.coins) }}</td>
+        <td>🔥 {{ u.streak }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Nessun utente ancora.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-title">📋 Ultimi Prelievi</div>
+  {% if recent_withdrawals %}
+  <table>
+    <thead>
+      <tr>
+        <th>Codice</th>
+        <th>Utente</th>
+        <th>Importo FC</th>
+        <th>Piattaforma</th>
+        <th>Data</th>
+        <th>Stato</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for w in recent_withdrawals %}
+      <tr>
+        <td style="font-family:monospace;font-size:0.8rem;color:var(--muted)">{{ w.code }}</td>
+        <td><strong>{{ w.username }}</strong></td>
+        <td style="color:var(--gold);font-weight:700">{{ "{:,}".format(w.amount) }}</td>
+        <td>{{ w.platform }}</td>
+        <td style="color:var(--muted);font-size:0.85rem">{{ w.created_at[:16] }}</td>
+        <td><span class="badge-status badge-{{ w.status }}">{{ w.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Nessuna richiesta ancora.</div>
+  {% endif %}
+</div>
+{% endblock %}

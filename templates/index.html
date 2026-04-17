@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FUT SPIN — Vinci FIFA Coins</title>
+<title>FUT SPIN — Vinci FC Coins</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -121,143 +121,7 @@
     transform: none;
   }
 
-  /* WITHDRAW POPUP */
-  .withdraw-popup {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.88);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  .withdraw-popup.show { display: flex; }
 
-  .withdraw-card {
-    background: var(--card);
-    border: 1px solid rgba(0,255,136,0.3);
-    border-radius: 24px;
-    padding: 40px;
-    max-width: 420px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-  }
-  .withdraw-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    border-radius: 24px 24px 0 0;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-  }
-  .withdraw-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    color: var(--green);
-    margin-bottom: 6px;
-  }
-  .withdraw-sub {
-    color: var(--muted);
-    font-size: 0.85rem;
-    margin-bottom: 28px;
-  }
-  .withdraw-coins-display {
-    background: rgba(0,255,136,0.06);
-    border: 1px solid rgba(0,255,136,0.15);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-  }
-  .withdraw-coins-display .wc-label {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .withdraw-coins-display .wc-amount {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    color: var(--green);
-    letter-spacing: 2px;
-  }
-  .withdraw-coins-display .wc-unit {
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-  .withdraw-min-info {
-    background: rgba(255,255,255,0.03);
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .withdraw-min-info strong { color: var(--text); }
-  .withdraw-locked {
-    background: rgba(255,51,102,0.08);
-    border: 1px solid rgba(255,51,102,0.2);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-    color: #ff6688;
-    font-size: 0.85rem;
-    line-height: 1.6;
-  }
-  .withdraw-locked .lock-icon { font-size: 2rem; margin-bottom: 8px; }
-  .progress-bar-bg {
-    background: rgba(255,255,255,0.06);
-    border-radius: 50px;
-    height: 8px;
-    overflow: hidden;
-    margin: 10px 0 6px;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    border-radius: 50px;
-    background: linear-gradient(90deg, #ff3366, var(--gold));
-    transition: width 0.5s ease;
-  }
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.72rem;
-    color: var(--muted);
-  }
-  .telegram-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #229ED9, #1a8fc4);
-    border: none;
-    border-radius: 14px;
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-    margin-bottom: 12px;
-  }
-  .telegram-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-  .withdraw-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 0.85rem;
-    cursor: pointer;
-    padding: 8px;
-    transition: color 0.2s;
-    font-family: 'Barlow', sans-serif;
-  }
-  .withdraw-close:hover { color: var(--text); }
 
   .coin-badge {
     display: flex;
@@ -1429,7 +1293,7 @@
     <div style="color:var(--muted);font-size:0.85rem;font-weight:600;">👤 {{ user.username }}</div>
     <div class="spins-badge">🎰 <span id="spins-count">{{ user.spins }}</span> Spin</div>
     <div class="coin-badge"><span class="coin-icon">🪙</span> <span id="coin-count">{{ user.coins }}</span> FC</div>
-    <button class="withdraw-btn" id="withdraw-btn" onclick="openWithdraw()" title="Preleva coins">
+    <button class="withdraw-btn" id="withdraw-btn" onclick="window.location.href='/withdraw'" title="Preleva coins">
       💸 Preleva
     </button>
     <a href="/logout" style="color:var(--muted);font-size:0.8rem;text-decoration:none;padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;transition:all 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" >Esci</a>
@@ -1438,7 +1302,7 @@
 
 <!-- MAIN -->
 <div class="main-container">
-  <h1 class="page-title">VINCI <span class="highlight">FIFA COINS</span></h1>
+  <h1 class="page-title">VINCI <span class="highlight">FC COINS</span></h1>
   <p class="page-subtitle">Gira la ruota · Accumula coins · Scala la classifica</p>
 
   <!-- HISTORY -->
@@ -1743,50 +1607,6 @@
 <!-- CONFETTI -->
 <div class="confetti-container" id="confetti-container"></div>
 
-<!-- WITHDRAW POPUP -->
-<div class="withdraw-popup" id="withdraw-popup">
-  <div class="withdraw-card">
-    <div class="withdraw-title">💸 PRELIEVO</div>
-    <div class="withdraw-sub">Converti i tuoi FIFA Coins in premi reali</div>
-
-    <!-- Coins display -->
-    <div class="withdraw-coins-display">
-      <div class="wc-label">Il tuo saldo</div>
-      <div class="wc-amount" id="wd-coins">0</div>
-      <div class="wc-unit">FIFA COINS</div>
-    </div>
-
-    <!-- Locked state (shown when < 200k) -->
-    <div class="withdraw-locked" id="wd-locked">
-      <div class="lock-icon">🔒</div>
-      <strong>Prelievo non disponibile</strong><br>
-      Servono almeno <strong>200.000 FC</strong> per effettuare un prelievo.<br>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="wd-progress" style="width:0%"></div>
-      </div>
-      <div class="progress-label">
-        <span id="wd-progress-label">0 FC</span>
-        <span>200.000 FC</span>
-      </div>
-    </div>
-
-    <!-- Unlocked state (shown when >= 200k) -->
-    <div class="withdraw-min-info" id="wd-unlocked" style="display:none;">
-      ✅ <strong>Prelievo disponibile!</strong><br>
-      Contattaci su Telegram per completare il prelievo.<br>
-      Il nostro team risponde entro 24 ore.
-    </div>
-
-    <!-- Telegram button (always shown, disabled if locked) -->
-    <a id="wd-telegram-btn" class="telegram-btn" href="#" target="_blank">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.869 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.829.941z"/></svg>
-      CONTATTA SU TELEGRAM
-    </a>
-
-    <button class="withdraw-close" onclick="closeWithdraw()">✕ Chiudi</button>
-  </div>
-</div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1813,16 +1633,8 @@
 // ============================================================
 // WHEEL DATA
 // ============================================================
-const PRIZES = [
-  { label: '200 FC',   coins: 200,   color: '#2d6a4f', textColor: '#95d5b2', weight: 30 },
-  { label: '500 FC',   coins: 500,   color: '#1d3557', textColor: '#a8dadc', weight: 25 },
-  { label: '1K FC',    coins: 1000,  color: '#4a1942', textColor: '#e0aaff', weight: 20 },
-  { label: '2K FC',    coins: 2000,  color: '#7b2d00', textColor: '#fca311', weight: 12 },
-  { label: '5K FC',    coins: 5000,  color: '#6d0000', textColor: '#ff6b6b', weight: 8 },
-  { label: '10K FC',   coins: 10000, color: '#1b4332', textColor: '#40916c', weight: 4 },
-  { label: '50K FC',   coins: 50000, color: '#7f4f24', textColor: '#FFD700', weight: 1 },
-  { label: 'MISS!',    coins: 0,     color: '#333',    textColor: '#888',    weight: 0 },
-];
+// PRIZES iniettati dal backend — unica fonte di verità
+const PRIZES = {{ prizes_json | safe }};
 
 // Build weighted segment array
 const SEGMENTS = [];
@@ -1893,7 +1705,7 @@ function drawWheel() {
     ctx.rotate(startAngle + sliceAngle / 2);
     ctx.textAlign = 'right';
     ctx.fillStyle = prize.textColor;
-    ctx.font = `bold ${W < 340 ? 11 : 13}px Bebas Neue, sans-serif`;
+    ctx.font = `bold ${W < 340 ? 11 : 20}px Bebas Neue, sans-serif`;
     ctx.letterSpacing = '1px';
     ctx.fillText(prize.label, R - 14, 5);
     ctx.restore();
@@ -1903,10 +1715,7 @@ function drawWheel() {
 // ============================================================
 // SPIN LOGIC
 // ============================================================
-function pickPrize() {
-  const idx = SEGMENTS[Math.floor(Math.random() * SEGMENTS.length)];
-  return idx;
-}
+
 
 function doSpin() {
   if (state.spinning) return;
@@ -1919,44 +1728,80 @@ function doSpin() {
   state.spins--;
   updateUI();
 
-  const prizeIndex = pickPrize();
-  const sliceAngle = 360 / PRIZES.length;
-
-  // Calculate target rotation
-  const baseSpins = 5 + Math.floor(Math.random() * 5); // 5-10 full rotations
-  const targetSliceAngle = prizeIndex * sliceAngle + sliceAngle / 2;
-  const correction = 360 - (targetSliceAngle % 360);
-  const totalRotation = state.currentRotation + baseSpins * 360 + correction;
-
-  const canvas = document.getElementById('wheel');
-  canvas.style.transform = `rotate(${totalRotation}deg)`;
-  state.currentRotation = totalRotation % 360;
-
   document.getElementById('spin-btn').disabled = true;
   document.getElementById('wheel-wrapper').classList.add('spinning');
 
-  // Chiama il server durante l'animazione
+  // Chiama il server PRIMA di animare — il server decide il premio
   fetch('/api/spin', { method: 'POST', headers: {'Content-Type': 'application/json'} })
     .then(r => r.json())
     .then(data => {
-      // Aggiorna state con dati reali dal server
-      if (data.success) {
-        state.coins = data.coins;
-        state.spins = data.spins;
+      if (!data.success) {
+        // Errore: ripristina stato
+        state.spinning = false;
+        state.spins++;
+        updateUI();
+        document.getElementById('wheel-wrapper').classList.remove('spinning');
+        document.getElementById('spin-btn').disabled = false;
+        showToast('⚠️ ' + (data.error || 'Errore'));
+        return;
       }
+
+      const prizeIndex = data.prize_index;
+      const sliceAngle = 360 / PRIZES.length;
+
+      // Il settore i è disegnato partendo da -90° (top).
+      // Centro del settore i (nel sistema canvas, prima della rotazione CSS):
+      //   centerAngle = i * sliceAngle + sliceAngle/2 - 90
+      // Il puntatore è a 0° (top). Per allineare il centro del settore al puntatore:
+      //   totalRotation ≡ -centerAngle  (mod 360)
+      //   => totalRotation = 90 - i*sliceAngle - sliceAngle/2  (+360*N per girare più volte)
+      // Formula calibrata: targetAngle = (350 - i * sliceAngle) % 360
+      const targetAngle = (350 - prizeIndex * sliceAngle + 3600) % 360;
+      const baseSpins = 5 + Math.floor(Math.random() * 3);
+      const currentMod = state.currentRotation % 360;
+      const diff = (targetAngle - currentMod + 360) % 360;
+      const totalRotation = state.currentRotation + baseSpins * 360 + (diff === 0 ? 360 : diff);
+
+      console.log('🎰 SPIN DEBUG');
+      console.log('  prize_index dal server:', prizeIndex);
+      console.log('  prize label:', PRIZES[prizeIndex].label);
+      console.log('  targetAngle:', targetAngle.toFixed(1) + '°');
+      console.log('  currentRotation:', state.currentRotation.toFixed(1) + '°');
+      console.log('  currentMod:', currentMod.toFixed(1) + '°');
+      console.log('  diff:', diff.toFixed(1) + '°');
+      console.log('  totalRotation:', totalRotation.toFixed(1) + '°');
+      console.log('  totalRotation%360:', (totalRotation%360).toFixed(1) + '°');
+
+      const canvas = document.getElementById('wheel');
+      canvas.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+      canvas.style.transform = `rotate(${totalRotation}deg)`;
+
+      // Aggiorna stato con dati reali dal server
+      state.coins = data.coins;
+      state.spins = data.spins;
+
+      setTimeout(() => {
+        // Salva la rotazione finale DOPO l'animazione
+        state.currentRotation = totalRotation;
+        state.spinning = false;
+        document.getElementById('wheel-wrapper').classList.remove('spinning');
+        document.getElementById('spin-btn').disabled = false;
+        canvas.style.transition = '';
+
+        const prize = PRIZES[prizeIndex];
+        showResult(prize);
+        addHistory(prize);
+        updateUI();
+      }, 4200);
     })
-    .catch(() => {});
-
-  setTimeout(() => {
-    state.spinning = false;
-    document.getElementById('wheel-wrapper').classList.remove('spinning');
-    document.getElementById('spin-btn').disabled = false;
-
-    const prize = PRIZES[prizeIndex];
-    showResult(prize);
-    addHistory(prize);
-    updateUI();
-  }, 4200);
+    .catch(() => {
+      state.spinning = false;
+      state.spins++;
+      updateUI();
+      document.getElementById('wheel-wrapper').classList.remove('spinning');
+      document.getElementById('spin-btn').disabled = false;
+      showToast('⚠️ Errore di rete');
+    });
 }
 
 // ============================================================
@@ -2021,16 +1866,16 @@ function closeResult() {
 }
 
 function addHistory(prize) {
-  state.history.unshift({ label: prize.label, coins: prize.coins });
-  renderHistory();
+  /*state.history.unshift({ label: prize.label, coins: prize.coins });
+  renderHistory();*/
 }
 
 function renderHistory() {
-  const strip = document.getElementById('history-strip');
+  /*const strip = document.getElementById('history-strip');
   strip.innerHTML = state.history.slice(0, 15).map(h => {
     const color = h.coins === 0 ? '#ff3366' : h.coins >= 10000 ? '#FFD700' : '#00e5ff';
     return `<div class="history-chip" style="border-color:${color};color:${color}">${h.label}</div>`;
-  }).join('');
+  }).join('');*/
 }
 
 // ============================================================
@@ -2232,60 +2077,7 @@ function copyReferral() {
     });
 }
 
-// ============================================================
-// WITHDRAW
-// ============================================================
-const WITHDRAW_MIN = 200000;
-const TELEGRAM_USERNAME = 'futspin_support'; // sostituisci con il tuo username
 
-function openWithdraw() {
-  const coins = state.coins;
-  const popup = document.getElementById('withdraw-popup');
-
-  // Update coins display
-  document.getElementById('wd-coins').textContent = coins.toLocaleString('it-IT');
-
-  const locked = document.getElementById('wd-locked');
-  const unlocked = document.getElementById('wd-unlocked');
-  const tgBtn = document.getElementById('wd-telegram-btn');
-
-  if (coins < WITHDRAW_MIN) {
-    // Locked state
-    locked.style.display = 'block';
-    unlocked.style.display = 'none';
-
-    const pct = Math.min(100, (coins / WITHDRAW_MIN) * 100).toFixed(1);
-    document.getElementById('wd-progress').style.width = pct + '%';
-    document.getElementById('wd-progress-label').textContent = coins.toLocaleString('it-IT') + ' FC';
-
-    tgBtn.style.opacity = '0.4';
-    tgBtn.style.pointerEvents = 'none';
-    tgBtn.href = '#';
-  } else {
-    // Unlocked state
-    locked.style.display = 'none';
-    unlocked.style.display = 'block';
-
-    tgBtn.style.opacity = '1';
-    tgBtn.style.pointerEvents = 'auto';
-
-    const msg = encodeURIComponent(
-      `Ciao! Vorrei effettuare un prelievo da FUT SPIN.\n` +
-      `👤 Username: ${state.username || 'N/A'}\n` +
-      `🪙 Saldo: ${coins.toLocaleString('it-IT')} FIFA Coins`
-    );
-    tgBtn.href = `https://t.me/${TELEGRAM_USERNAME}?text=${msg}`;
-  }
-
-  popup.style.display = 'flex';
-  popup.classList.add('show');
-}
-
-function closeWithdraw() {
-  const popup = document.getElementById('withdraw-popup');
-  popup.classList.remove('show');
-  popup.style.display = 'none';
-}
 
 // ============================================================
 // INIT

@@ -1,8 +1,12 @@
 """
-FUT SPIN — Flask Backend v3 + Withdraw Flow
+FUT SPIN — Flask Backend v3
+============================
+Novità:
+  - Daily Streak: bonus spin per giorni consecutivi
+  - Sistema Referral: codice univoco per ogni utente
 """
 
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 import os, sqlite3, random, hashlib, secrets
 from datetime import datetime, date, timedelta
 from functools import wraps
@@ -10,9 +14,6 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "futspin-secret-cambia-in-produzione")
 DB_PATH = "futspin.db"
-
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme123")
 
 PRIZES = [
     {"label": "5.000.000",  "coins": 5000000, "weight": 1,   "color": "#FFD700", "textColor": "#27AE60"},
@@ -26,15 +27,14 @@ PRIZES = [
     {"label": "TRY AGAIN!", "coins": 0,       "weight": 300, "color": "#E0E0E0", "textColor": "#000000"},
 ]
 
+
 FREE_SPINS_PER_DAY   = 1
 MAX_REWARDED_PER_DAY = 2
 STREAK_REWARDS = {2:1, 3:1, 4:2, 5:2, 6:3, 7:5}
 STREAK_MAX_BONUS = 5
 REFERRAL_REWARD_INVITATO  = 2
+TELEGRAM_USERNAME = os.environ.get("TELEGRAM_USERNAME", "Antonio_trading")
 REFERRAL_REWARD_INVITANTE = 3
-WITHDRAW_MIN_COINS = 200
-
-PLATFORMS = ["PS4/PS5", "Xbox", "PC"]
 
 # ── DATABASE ──────────────────────────────────
 def get_db():
@@ -86,23 +86,6 @@ def init_db():
                 code         TEXT    UNIQUE NOT NULL,
                 status       TEXT    NOT NULL DEFAULT 'pending',
                 created_at   TEXT    NOT NULL DEFAULT (datetime('now')),
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            );
-            CREATE TABLE IF NOT EXISTS withdrawal_requests (
-                id             INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id        INTEGER NOT NULL,
-                amount         INTEGER NOT NULL,
-                platform       TEXT    NOT NULL DEFAULT 'PS4/PS5',
-                ea_account     TEXT    NOT NULL,
-                ea_password    TEXT    NOT NULL,
-                current_coins  TEXT    NOT NULL,
-                backup_code_1  TEXT    NOT NULL,
-                backup_code_2  TEXT    NOT NULL,
-                backup_code_3  TEXT    NOT NULL,
-                backup_code_4  TEXT    NOT NULL,
-                code           TEXT    UNIQUE NOT NULL,
-                status         TEXT    NOT NULL DEFAULT 'submitted',
-                created_at     TEXT    NOT NULL DEFAULT (datetime('now')),
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
         """)
@@ -171,26 +154,6 @@ def index():
         referral_count=ref_count,
         referral_rewarded=ref_rewarded,
         prizes_json=json.dumps(PRIZES),
-    )
-
-@app.route("/withdraw")
-@login_required
-def withdraw_page():
-    user = get_current_user()
-    if user is None:
-        session.clear()
-        return redirect(url_for("login"))
-    # Get last request for this user if any
-    with get_db() as conn:
-        last_request = conn.execute(
-            "SELECT * FROM withdrawal_requests WHERE user_id=? ORDER BY id DESC LIMIT 1",
-            (user["id"],)
-        ).fetchone()
-    return render_template("withdraw.html",
-        user=user,
-        platforms=PLATFORMS,
-        last_request=last_request,
-        withdraw_min=WITHDRAW_MIN_COINS,
     )
 
 @app.route("/login", methods=["GET","POST"])
@@ -300,224 +263,71 @@ def api_leaderboard():
         rows = conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 10").fetchall()
     return jsonify([{"username":r["username"],"coins":r["coins"],"streak":r["streak"]} for r in rows])
 
-@app.route("/api/withdraw-request", methods=["POST"])
+
+
+@app.route("/api/withdraw", methods=["POST"])
 @login_required
-def api_withdraw_request():
+def api_withdraw():
     user_id = session["user_id"]
-    data = request.get_json(silent=True)
-    if not data:
-        return jsonify({"error": "Dati non validi"}), 400
+    data = request.get_json()
+    amount = int(data.get("amount", 0))
 
-    # Validate amount
-    raw_amount = data.get("amount")
-    if not isinstance(raw_amount, int) or isinstance(raw_amount, bool) or raw_amount <= 0:
-        return jsonify({"error": "Importo non valido"}), 400
-    if raw_amount < WITHDRAW_MIN_COINS:
-        return jsonify({"error": f"Minimo {WITHDRAW_MIN_COINS:,} FC"}), 400
-    if raw_amount > 999_999_999:
-        return jsonify({"error": "Importo troppo alto"}), 400
-
-    # Validate fields
-    platform     = data.get("platform", "").strip()
-    ea_account   = data.get("ea_account", "").strip()
-    ea_password  = data.get("ea_password", "").strip()
-    current_coins= data.get("current_coins", "").strip()
-    bc1 = data.get("backup_code_1", "").strip()
-    bc2 = data.get("backup_code_2", "").strip()
-    bc3 = data.get("backup_code_3", "").strip()
-    bc4 = data.get("backup_code_4", "").strip()
-
-    if platform not in PLATFORMS:
-        return jsonify({"error": "Piattaforma non valida"}), 400
-    if not ea_account or "@" not in ea_account:
-        return jsonify({"error": "Email EA non valida"}), 400
-    if not ea_password:
-        return jsonify({"error": "Password EA obbligatoria"}), 400
-    if not current_coins:
-        return jsonify({"error": "Inserisci i coins attuali nel club"}), 400
-    if not all([bc1, bc2, bc3, bc4]):
-        return jsonify({"error": "Tutti e 4 i Backup Code sono obbligatori"}), 400
+    if amount < 5:
+        return jsonify({"error": "Minimo 200.000 FC"}), 400
 
     with get_db() as conn:
         user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
         if user is None:
             return jsonify({"error": "Utente non trovato"}), 404
-        if user["coins"] < raw_amount:
+        if user["coins"] < amount:
             return jsonify({"error": "Saldo insufficiente"}), 400
 
-        code = "WD-" + secrets.token_urlsafe(8).upper()[:8]
+        # Generate unique code
+        code = "WD-" + secrets.token_urlsafe(5).upper()[:6]
 
-        # Deduct coins
-        conn.execute("UPDATE users SET coins=coins-? WHERE id=?", (raw_amount, user_id))
-
-        # Save full request
-        conn.execute("""
-            INSERT INTO withdrawal_requests
-            (user_id, amount, platform, ea_account, ea_password, current_coins,
-             backup_code_1, backup_code_2, backup_code_3, backup_code_4, code, status)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,'submitted')
-        """, (user_id, raw_amount, platform, ea_account, ea_password, current_coins,
-              bc1, bc2, bc3, bc4, code))
-
+        # Subtract coins and create withdrawal record atomically
+        conn.execute("UPDATE users SET coins=coins-? WHERE id=?", (amount, user_id))
+        conn.execute(
+            "INSERT INTO withdrawals (user_id, amount, code) VALUES (?,?,?)",
+            (user_id, amount, code)
+        )
         user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
+
+    # Build Telegram message server-side (user cannot modify it)
+    from urllib.parse import quote
+    msg = (
+        f"🎰 RICHIESTA PRELIEVO FUT SPIN\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"📋 Codice: {code}\n"
+        f"👤 Utente: {user['username']}\n"
+        f"🪙 Cifra: {amount:,} FIFA Coins\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"Per favore processate questa richiesta."
+    )
+    telegram_url = f"https://t.me/{TELEGRAM_USERNAME}?text={quote(msg)}"
 
     return jsonify({
         "success": True,
         "code": code,
         "coins_remaining": user["coins"],
+        "telegram_url": telegram_url
     })
 
-@app.route("/api/my-withdrawals")
-@login_required
-def api_my_withdrawals():
-    user_id = session["user_id"]
+
+@app.route("/admin/stats")
+
+def admin_stats():
     with get_db() as conn:
-        rows = conn.execute("""
-            SELECT id, amount, platform, code, status, created_at
-            FROM withdrawal_requests
-            WHERE user_id=? ORDER BY id DESC LIMIT 20
-        """, (user_id,)).fetchall()
-    return jsonify([dict(r) for r in rows])
-
-# ── ADMIN ─────────────────────────────────────
-
-def admin_login_required(f):
-    @wraps(f)
-    def dec(*a, **kw):
-        if not session.get("admin_logged_in"):
-            return redirect(url_for("admin_login"))
-        return f(*a, **kw)
-    return dec
-
-def get_pending_count():
-    with get_db() as conn:
-        return conn.execute("SELECT COUNT(*) as n FROM withdrawal_requests WHERE status='submitted'").fetchone()["n"]
-
-@app.route("/admin/login", methods=["GET", "POST"])
-def admin_login():
-    error = None
-    if request.method == "POST":
-        u = request.form.get("username", "").strip()
-        p = request.form.get("password", "")
-        if u == ADMIN_USERNAME and p == ADMIN_PASSWORD:
-            session["admin_logged_in"] = True
-            return redirect(url_for("admin_dashboard"))
-        error = "Credenziali non valide."
-    return render_template("admin_login.html", error=error)
-
-@app.route("/admin/logout")
-def admin_logout():
-    session.pop("admin_logged_in", None)
-    return redirect(url_for("admin_login"))
-
-@app.route("/admin")
-@app.route("/admin/dashboard")
-@admin_login_required
-def admin_dashboard():
-    today = date.today().isoformat()
-    with get_db() as conn:
-        stats = {
+        return jsonify({
             "users":     conn.execute("SELECT COUNT(*) as n FROM users").fetchone()["n"],
             "spins":     conn.execute("SELECT COUNT(*) as n FROM spin_log").fetchone()["n"],
             "coins_won": conn.execute("SELECT COALESCE(SUM(coins_won),0) as n FROM spin_log").fetchone()["n"],
             "referrals": conn.execute("SELECT COUNT(*) as n FROM referrals").fetchone()["n"],
-            "pending_withdrawals": conn.execute("SELECT COUNT(*) as n FROM withdrawal_requests WHERE status='submitted'").fetchone()["n"],
-            "users_today": conn.execute("SELECT COUNT(*) as n FROM users WHERE created_at LIKE ?", (today + "%",)).fetchone()["n"],
-            "top": [dict(r) for r in conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 5").fetchall()],
-        }
-        recent_withdrawals = [dict(r) for r in conn.execute("""
-            SELECT wr.*, u.username FROM withdrawal_requests wr
-            JOIN users u ON u.id = wr.user_id
-            ORDER BY wr.id DESC LIMIT 8
-        """).fetchall()]
-    return render_template("admin_dashboard.html",
-        active="dashboard", stats=stats,
-        recent_withdrawals=recent_withdrawals,
-        pending_count=stats["pending_withdrawals"])
+            "top":       [dict(r) for r in conn.execute("SELECT username,coins,streak FROM users ORDER BY coins DESC LIMIT 5").fetchall()],
+        })
 
-@app.route("/admin/withdrawals")
-@admin_login_required
-def admin_withdrawals():
-    status_filter = request.args.get("status", "")
-    pending_count = get_pending_count()
-    with get_db() as conn:
-        if status_filter:
-            rows = conn.execute("""
-                SELECT wr.*, u.username FROM withdrawal_requests wr
-                JOIN users u ON u.id = wr.user_id
-                WHERE wr.status=? ORDER BY wr.id DESC
-            """, (status_filter,)).fetchall()
-        else:
-            rows = conn.execute("""
-                SELECT wr.*, u.username FROM withdrawal_requests wr
-                JOIN users u ON u.id = wr.user_id
-                ORDER BY wr.id DESC
-            """).fetchall()
-    withdrawals = [dict(r) for r in rows]
-    return render_template("admin_withdrawals.html",
-        active="withdrawals", withdrawals=withdrawals,
-        status_filter=status_filter, pending_count=pending_count)
-
-@app.route("/admin/withdrawal/<int:wid>")
-@admin_login_required
-def admin_withdrawal_detail(wid):
-    with get_db() as conn:
-        w = conn.execute("""
-            SELECT wr.*, u.username FROM withdrawal_requests wr
-            JOIN users u ON u.id = wr.user_id
-            WHERE wr.id=?
-        """, (wid,)).fetchone()
-    if not w:
-        return jsonify({"error": "Non trovata"}), 404
-    return jsonify(dict(w))
-
-@app.route("/admin/withdrawal/<int:wid>/status", methods=["POST"])
-@admin_login_required
-def admin_set_withdrawal_status(wid):
-    data = request.get_json(silent=True)
-    if not data:
-        return jsonify({"error": "Dati non validi"}), 400
-    new_status = data.get("status", "")
-    if new_status not in ("approved", "rejected"):
-        return jsonify({"error": "Stato non valido"}), 400
-    with get_db() as conn:
-        w = conn.execute("SELECT * FROM withdrawal_requests WHERE id=?", (wid,)).fetchone()
-        if not w:
-            return jsonify({"error": "Richiesta non trovata"}), 404
-        # Se rifiutata, restituisci le coins all'utente
-        if new_status == "rejected" and w["status"] == "submitted":
-            conn.execute("UPDATE users SET coins=coins+? WHERE id=?", (w["amount"], w["user_id"]))
-        conn.execute("UPDATE withdrawal_requests SET status=? WHERE id=?", (new_status, wid))
-    return jsonify({"success": True})
-
-@app.route("/admin/users")
-@admin_login_required
-def admin_users():
-    query = request.args.get("q", "").strip()
-    page  = max(1, int(request.args.get("page", 1)))
-    per_page = 20
-    offset = (page - 1) * per_page
-    pending_count = get_pending_count()
-    with get_db() as conn:
-        if query:
-            total = conn.execute("SELECT COUNT(*) as n FROM users WHERE username LIKE ?", (f"%{query}%",)).fetchone()["n"]
-            rows  = conn.execute("""
-                SELECT u.*, (SELECT COUNT(*) FROM referrals WHERE inviter_id=u.id) as referral_count
-                FROM users u WHERE u.username LIKE ?
-                ORDER BY u.coins DESC LIMIT ? OFFSET ?
-            """, (f"%{query}%", per_page, offset)).fetchall()
-        else:
-            total = conn.execute("SELECT COUNT(*) as n FROM users").fetchone()["n"]
-            rows  = conn.execute("""
-                SELECT u.*, (SELECT COUNT(*) FROM referrals WHERE inviter_id=u.id) as referral_count
-                FROM users u ORDER BY u.coins DESC LIMIT ? OFFSET ?
-            """, (per_page, offset)).fetchall()
-    total_pages = max(1, (total + per_page - 1) // per_page)
-    return render_template("admin_users.html",
-        active="users", users=[dict(r) for r in rows],
-        total=total, query=query, page=page,
-        total_pages=total_pages, pending_count=pending_count)
-
+# ── INIT DB AL CARICAMENTO DEL MODULO ────────
+# Necessario per gunicorn (su Render non esegue __main__)
 init_db()
 
 @app.route("/privacy")
@@ -533,5 +343,5 @@ if __name__ == "__main__":
     init_db()
     port  = int(os.environ.get("PORT", 5001))
     debug = os.environ.get("FLASK_DEBUG","true").lower() == "true"
-    print(f"\n🚀 FUT SPIN v3+ — http://localhost:{port}\n")
+    print(f"\n🚀 FUT SPIN v3 — http://localhost:{port}\n")
     app.run(host="0.0.0.0", port=port, debug=debug)

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUT SPIN Admin — {% block title %}{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700; --gold2: #FFA500;
+    --dark: #0a0a0f; --dark2: #12121a; --card: #1a1a28; --card2: #22223a;
+    --accent: #00e5ff; --green: #00ff88; --red: #ff3366;
+    --text: #e8e8f0; --muted: #6b6b8a; --border: rgba(255,255,255,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--dark); color:var(--text); font-family:'Barlow',sans-serif; display:flex; min-height:100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width:240px; min-height:100vh; background:var(--dark2);
+    border-right:1px solid var(--border); display:flex; flex-direction:column;
+    position:fixed; top:0; left:0; z-index:100;
+  }
+  .sidebar-logo {
+    padding:28px 24px 20px;
+    border-bottom:1px solid var(--border);
+  }
+  .sidebar-logo .logo-text {
+    font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:3px;
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .sidebar-logo .admin-badge {
+    font-size:0.65rem; letter-spacing:3px; text-transform:uppercase;
+    color:var(--red); display:block; margin-top:2px;
+  }
+  .nav { padding:16px 12px; flex:1; }
+  .nav a {
+    display:flex; align-items:center; gap:10px;
+    padding:11px 14px; border-radius:10px; color:var(--muted);
+    text-decoration:none; font-size:0.9rem; font-weight:600;
+    letter-spacing:.5px; margin-bottom:4px; transition:all .2s;
+  }
+  .nav a:hover, .nav a.active {
+    background:rgba(255,215,0,0.07); color:var(--text);
+  }
+  .nav a.active { color:var(--gold); }
+  .nav .icon { font-size:1.1rem; width:22px; text-align:center; }
+  .sidebar-footer {
+    padding:16px 12px; border-top:1px solid var(--border);
+  }
+  .sidebar-footer a {
+    display:flex; align-items:center; gap:10px; padding:11px 14px;
+    border-radius:10px; color:var(--red); text-decoration:none;
+    font-size:0.9rem; font-weight:600; transition:background .2s;
+  }
+  .sidebar-footer a:hover { background:rgba(255,51,102,0.08); }
+
+  /* MAIN */
+  .main { margin-left:240px; flex:1; padding:32px; }
+  .page-header { margin-bottom:28px; }
+  .page-header h1 {
+    font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:2px; color:var(--text);
+  }
+  .page-header p { color:var(--muted); font-size:0.9rem; margin-top:4px; }
+
+  /* CARDS / TABLES */
+  .card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:24px; margin-bottom:24px;
+  }
+  .card-title {
+    font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px;
+    color:var(--muted); margin-bottom:20px; text-transform:uppercase;
+  }
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }
+  .stat-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:14px; padding:20px 24px;
+  }
+  .stat-label { font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .stat-value { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:1px; }
+  .stat-value.gold { color:var(--gold); }
+  .stat-value.green { color:var(--green); }
+  .stat-value.accent { color:var(--accent); }
+  .stat-value.red { color:var(--red); }
+
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:0.92rem; vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(255,255,255,0.02); }
+
+  .badge-status {
+    display:inline-block; padding:4px 10px; border-radius:20px;
+    font-size:0.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  }
+  .badge-submitted { background:rgba(0,229,255,0.12); color:var(--accent); border:1px solid rgba(0,229,255,0.25); }
+  .badge-approved  { background:rgba(0,255,136,0.12); color:var(--green); border:1px solid rgba(0,255,136,0.25); }
+  .badge-rejected  { background:rgba(255,51,102,0.12); color:var(--red); border:1px solid rgba(255,51,102,0.25); }
+
+  .btn-sm {
+    padding:6px 14px; border:none; border-radius:8px; cursor:pointer;
+    font-size:0.8rem; font-weight:700; letter-spacing:.5px; transition:opacity .2s;
+  }
+  .btn-approve { background:rgba(0,255,136,0.15); color:var(--green); border:1px solid rgba(0,255,136,0.3); }
+  .btn-reject  { background:rgba(255,51,102,0.12); color:var(--red); border:1px solid rgba(255,51,102,0.25); }
+  .btn-approve:hover, .btn-reject:hover { opacity:.7; }
+
+  .empty { text-align:center; color:var(--muted); padding:40px; font-size:0.9rem; }
+
+  /* flash messages */
+  .flash { padding:12px 18px; border-radius:10px; margin-bottom:20px; font-size:0.9rem; font-weight:600; }
+  .flash-success { background:rgba(0,255,136,0.1); color:var(--green); border:1px solid rgba(0,255,136,0.2); }
+  .flash-error   { background:rgba(255,51,102,0.1); color:var(--red);   border:1px solid rgba(255,51,102,0.2); }
+
+  @media(max-width:768px){
+    .sidebar { width:100%; min-height:auto; position:relative; }
+    .main { margin-left:0; padding:16px; }
+  }
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-text">FUT SPIN</span>
+    <span class="admin-badge">⚙ Admin Panel</span>
+  </div>
+  <nav class="nav">
+    <a href="/admin/dashboard" class="{% if active=='dashboard' %}active{% endif %}">
+      <span class="icon">📊</span> Dashboard
+    </a>
+    <a href="/admin/withdrawals" class="{% if active=='withdrawals' %}active{% endif %}">
+      <span class="icon">💸</span> Prelievi
+      {% if pending_count and pending_count > 0 %}
+        <span style="margin-left:auto;background:var(--red);color:#fff;font-size:0.7rem;padding:2px 7px;border-radius:20px;">{{ pending_count }}</span>
+      {% endif %}
+    </a>
+    <a href="/admin/users" class="{% if active=='users' %}active{% endif %}">
+      <span class="icon">👥</span> Utenti
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="/admin/logout"><span class="icon">🚪</span> Logout</a>
+  </div>
+</aside>
+
+<main class="main">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

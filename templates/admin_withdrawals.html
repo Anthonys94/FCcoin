@@ -1,0 +1,186 @@
+{% extends "admin_base.html" %}
+{% block title %}Prelievi{% endblock %}
+
+{% block extra_style %}
+<style>
+.filter-bar {
+  display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap;
+}
+.filter-btn {
+  padding:8px 18px; border-radius:20px; font-size:0.8rem; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none;
+  background:var(--card2); color:var(--muted); transition:all .2s; text-decoration:none;
+}
+.filter-btn.active { background:rgba(255,215,0,0.12); color:var(--gold); }
+
+.modal-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75);
+  z-index:999; align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--card); border:1px solid rgba(255,215,0,0.15);
+  border-radius:20px; padding:32px; width:100%; max-width:560px;
+  max-height:90vh; overflow-y:auto; position:relative;
+}
+.modal h2 {
+  font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px;
+  margin-bottom:24px; color:var(--gold);
+}
+.modal-close {
+  position:absolute; top:16px; right:18px; background:none; border:none;
+  color:var(--muted); font-size:1.4rem; cursor:pointer; line-height:1;
+}
+.modal-close:hover { color:var(--text); }
+.detail-row {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:10px 0; border-bottom:1px solid var(--border); gap:16px;
+}
+.detail-row:last-of-type { border-bottom:none; }
+.detail-label { font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); min-width:130px; }
+.detail-value { font-weight:600; text-align:right; word-break:break-all; }
+.detail-value.sensitive {
+  font-family:monospace; background:rgba(255,51,102,0.08);
+  border:1px solid rgba(255,51,102,0.2); border-radius:6px;
+  padding:4px 10px; color:var(--red); font-size:0.85rem;
+}
+.modal-actions { display:flex; gap:12px; margin-top:24px; }
+.modal-actions button {
+  flex:1; padding:14px; border:none; border-radius:12px; font-family:'Bebas Neue',sans-serif;
+  font-size:1rem; letter-spacing:2px; cursor:pointer; transition:opacity .2s;
+}
+.btn-approve-lg { background:linear-gradient(135deg,#00c96a,#00a855); color:#fff; }
+.btn-reject-lg  { background:linear-gradient(135deg,#ff3366,#c0002a); color:#fff; }
+.btn-approve-lg:hover, .btn-reject-lg:hover { opacity:.8; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Richieste di Prelievo</h1>
+  <p>Gestisci le richieste degli utenti</p>
+</div>
+
+<div class="filter-bar">
+  <a href="/admin/withdrawals" class="filter-btn {% if not status_filter %}active{% endif %}">Tutti</a>
+  <a href="/admin/withdrawals?status=submitted" class="filter-btn {% if status_filter=='submitted' %}active{% endif %}">In Attesa</a>
+  <a href="/admin/withdrawals?status=approved"  class="filter-btn {% if status_filter=='approved'  %}active{% endif %}">Approvati</a>
+  <a href="/admin/withdrawals?status=rejected"  class="filter-btn {% if status_filter=='rejected'  %}active{% endif %}">Rifiutati</a>
+</div>
+
+<div class="card" style="padding:0">
+  {% if withdrawals %}
+  <table>
+    <thead>
+      <tr>
+        <th>Codice</th>
+        <th>Utente</th>
+        <th>Importo FC</th>
+        <th>Piattaforma</th>
+        <th>Data</th>
+        <th>Stato</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for w in withdrawals %}
+      <tr>
+        <td style="font-family:monospace;font-size:0.8rem;color:var(--muted)">{{ w.code }}</td>
+        <td><strong>{{ w.username }}</strong></td>
+        <td style="color:var(--gold);font-weight:700">{{ "{:,}".format(w.amount) }}</td>
+        <td>{{ w.platform }}</td>
+        <td style="color:var(--muted);font-size:0.85rem">{{ w.created_at[:16] }}</td>
+        <td><span class="badge-status badge-{{ w.status }}">{{ w.status }}</span></td>
+        <td>
+          <button class="btn-sm" style="background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.2)"
+            onclick="openModal({{ w.id }})">Dettagli</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Nessuna richiesta trovata.</div>
+  {% endif %}
+</div>
+
+<!-- MODAL DETTAGLIO -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modalTitle">Dettaglio Prelievo</h2>
+    <div id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<script>
+async function openModal(id) {
+  // mostra overlay con loading
+  document.getElementById('modalTitle').textContent = 'Caricamento…';
+  document.getElementById('modalBody').innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted)">⏳ Caricamento dati…</div>';
+  document.getElementById('modalActions').innerHTML = '';
+  document.getElementById('modalOverlay').classList.add('open');
+
+  let w;
+  try {
+    const res = await fetch(`/admin/withdrawal/${id}`);
+    w = await res.json();
+    if (w.error) throw new Error(w.error);
+  } catch(e) {
+    document.getElementById('modalBody').innerHTML = `<div style="color:var(--red);padding:20px">Errore: ${e.message}</div>`;
+    return;
+  }
+
+  document.getElementById('modalTitle').textContent = 'Prelievo — ' + w.code;
+
+  const fields = [
+    ['Utente',        w.username,      false],
+    ['Importo FC',    Number(w.amount).toLocaleString('it-IT') + ' FC', false],
+    ['Piattaforma',   w.platform,      false],
+    ['EA Account',    w.ea_account,    true],
+    ['EA Password',   w.ea_password,   true],
+    ['Coins nel Club',w.current_coins, false],
+    ['Backup Code 1', w.backup_code_1, true],
+    ['Backup Code 2', w.backup_code_2, true],
+    ['Backup Code 3', w.backup_code_3, true],
+    ['Backup Code 4', w.backup_code_4, true],
+    ['Inviato il',    (w.created_at||'').substring(0,16), false],
+    ['Stato',         w.status,        false],
+  ];
+
+  document.getElementById('modalBody').innerHTML = fields.map(([label, val, sensitive]) => `
+    <div class="detail-row">
+      <span class="detail-label">${label}</span>
+      <span class="detail-value ${sensitive ? 'sensitive' : ''}">${val != null ? String(val).replace(/</g,'&lt;') : '—'}</span>
+    </div>`).join('');
+
+  document.getElementById('modalActions').innerHTML = w.status === 'submitted'
+    ? `<button class="btn-approve-lg" onclick="setStatus(${w.id},'approved')">✓ APPROVA</button>
+       <button class="btn-reject-lg"  onclick="setStatus(${w.id},'rejected')">✕ RIFIUTA</button>`
+    : `<p style="color:var(--muted);text-align:center;width:100%">Richiesta già <strong>${w.status}</strong></p>`;
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+async function setStatus(id, status) {
+  const label = status === 'approved' ? 'approvare' : 'rifiutare';
+  if (!confirm(`Sei sicuro di voler ${label} questa richiesta?`)) return;
+
+  const res = await fetch(`/admin/withdrawal/${id}/status`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ status })
+  });
+  const data = await res.json();
+  if (data.success) { closeModal(); location.reload(); }
+  else { alert('Errore: ' + (data.error || 'sconosciuto')); }
+}
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+</script>
+{% endblock %}

